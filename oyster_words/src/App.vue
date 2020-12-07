@@ -1,0 +1,40 @@
+<template>
+  <div id="app">
+    <router-view/>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'App'
+}
+</script>
+
+<style>
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    height:100%;
+    width:100%;
+  }
+  .panel_shadow{
+    position: absolute;
+    z-index: 99;
+    height:max-content;
+    background: rgb(255, 255, 255) !important;
+    box-shadow:0 5px 20px rgba(0,0,0,0.07);
+    opacity:1;
+    border-radius:10px;
+    padding:20px 30px 30px 35px;
+  }
+  .forget{
+    font-size:14px;
+    font-weight:400;
+    line-height:17px;
+    color:rgba(136,136,136,1);
+    opacity:1;
+    text-decoration: none;
+  }
+</style>
