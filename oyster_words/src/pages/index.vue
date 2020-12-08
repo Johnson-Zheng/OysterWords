@@ -3,8 +3,8 @@
 
     <div id="header_bar">
       <img id="face" alt="头像"/>
-      <p>{{username}}</p>
-      <p>挑战胜场：{{win_num}}</p>
+      <p>{{userId}}{{username}}</p>
+      <p>挑战胜场：{{winCnt}}</p>
     </div>
 
     <div id="content">
@@ -27,11 +27,27 @@
     },
 
       data(){
+
         return{
+          userId:0,
           username:"test",
-          win_num:1,
+          winCnt:1,
+          faceId:0,
+          score:0,
 
         }
+      },
+      mounted(){
+          this.getUserData();
+      },
+      methods:{
+          getUserData(){
+            this.userId = localStorage.getItem("userId");
+            this.username = localStorage.getItem("username");
+            this.winCnt = localStorage.getItem("winCnt");
+            this.score = localStorage.getItem("score");
+
+          }
       }
     }
 

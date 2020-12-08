@@ -153,6 +153,7 @@
                           localStorage.setItem("score",userdata.score)
                           localStorage.setItem("faceId",userdata.faceId)
                           localStorage.setItem("userId",userdata.userId)
+                          localStorage.setItem("winCnt",userdata.winCnt)
                           this.$router.push('/index')
                           break;
                         case 2:
