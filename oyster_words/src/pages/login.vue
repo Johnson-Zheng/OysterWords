@@ -2,6 +2,7 @@
     <div id="container">
 <!--        <img id="logo" src="../assets/logo/横向@2x.png">-->
 <!--        <img id="img1" src="../assets/images/login_img1.png">-->
+      <div class="bg"></div>
         <div id="panel" class="panel_shadow">
             <div id="login-panel">
                 <el-tabs v-model="tabSelect" align="center">
@@ -16,29 +17,17 @@
                             <el-form-item label="密码" prop="user_password" style="margin-bottom:40px">
                                 <el-input placeholder="请输入密码" v-model="login_form.user_password" show-password/>
                             </el-form-item>
-                            <el-row class="mt-1875">
-                                <el-col :span="6">
-                                    <el-checkbox v-model="remember_me">记住密码</el-checkbox>
-                                </el-col>
-                                <el-col :span="12">
-                                    <div style="width:100%;opacity: 0">.</div>
-                                </el-col>
-                                <el-col :span="6">
-                                    <router-link to='reset_password' class="forget">忘记密码？</router-link>
-                                </el-col>
-                            </el-row>
-
-                            <el-col :span="24" class="mt-30"><el-button type="primary" style="width:100%;" @click="user_login(login_form)" :loading='loginLoading'>登陆</el-button></el-col>
-
-                        </el-form>
-
+                            <el-col :span="24" class="mt-30" style="margin-bottom:10px">
+                              <el-button round type="primary" style="width:100%;" @click="user_login(login_form)" :loading='loginLoading'>登陆</el-button>
+                            </el-col>
+                          </el-form>
                     </el-tab-pane>
                     <el-tab-pane label="注册" name="second">
                         <el-form label-position="left"
                                  ref="register_form"
                                  :rules="register_rules"
                                  status-icon :model="register_form" label-width="80px" class="mt-30">
-                            <el-form-item label="用户名" prop="username">
+                            <el-form-item label="用户名" prop="username" style="margin-top:40px">
                                 <el-input v-model="register_form.username" placeholder="请输入用户名"/>
                             </el-form-item>
                             <el-form-item label="密码" prop="user_password">
@@ -324,7 +313,7 @@
         //                         this.loading = false;
         //                         this.$message.warning(resp.data.data+",请重新尝试")
         //                     }
-        //                 })
+        //                 })npm
         //             } else {
         //                 this.$message.error('请核验表单信息是否遗漏');
         //                 return false;
@@ -341,10 +330,16 @@
 </script>
 
 <style scoped>
-
-    #container{
-        min-height: 100%;
+    .bg{
+      width: 100vw;
+      height: 100vh;
+      background-color: #58a1ff;
     }
+    #container{
+      min-height: 100%;
+
+    }
+
     #logo{
         position: absolute;
         left: 10vw;
@@ -361,21 +356,21 @@
         object-fit: cover;
     }
 
-    #panel{
-        right: 9.5%;
-        top:50%;
-        transform: translateY(-50%);
-        width:350px;
-        position: absolute;
+  #panel{
+    left: 50%;
+    top:50%;
+    transform: translate(-50%,-50%);
+    width:350px;
+    position: absolute;
+    transition: all ease-in-out 0.3s;
+  }
 
-    }
-
-    #login-panel >>> .el-tabs__item {
-        width: 175px;
-    }
-    #login-panel >>> .el-tabs__item {
-        width: 175px;
-    }
+  #login-panel >>> .el-tabs__item {
+    width: 175px;
+  }
+  #login-panel >>> .el-tabs__item {
+    width: 175px;
+  }
 
 
 

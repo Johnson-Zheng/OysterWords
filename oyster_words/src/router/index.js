@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import index from "../pages/index";
 import login from "../pages/login.vue";
 
-
 Vue.use(Router)
 
 export default new Router({

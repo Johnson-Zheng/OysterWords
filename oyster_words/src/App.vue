@@ -11,6 +11,9 @@ export default {
 </script>
 
 <style>
+  body{
+    margin: 0!important;
+  }
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -26,7 +29,7 @@ export default {
     background: rgb(255, 255, 255) !important;
     box-shadow:0 5px 20px rgba(0,0,0,0.07);
     opacity:1;
-    border-radius:10px;
+    border-radius:15px;
     padding:20px 30px 30px 35px;
   }
   .forget{
