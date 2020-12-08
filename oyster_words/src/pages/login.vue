@@ -142,12 +142,18 @@
                       let code = res.data.respCode
                       switch (code){
                         case 1:
+                          this.$message({
+                            duration:2000,
+                            showClose:true,
+                            message: '登陆成功',
+                            type: 'success'
+                          });
                           let userdata = res.data.data
                           localStorage.setItem("username",userdata.username)
                           localStorage.setItem("score",userdata.score)
                           localStorage.setItem("faceId",userdata.faceId)
                           localStorage.setItem("userId",userdata.userId)
-                          this.$message.success("用户"+localStorage.getItem("username")+"登陆成功")
+                          this.$router.push('/index')
                           break;
                         case 2:
                           this.$message.error(res.data.msg)
