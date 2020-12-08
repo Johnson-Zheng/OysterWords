@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import index from "../pages/index";
 import login from "../pages/login.vue";
+import ranking_list from "../pages/ranking_list.vue";
 
 Vue.use(Router)
 
@@ -26,6 +27,14 @@ export default new Router({
       component: login,
       meta:{
         title: '生蚝单词-登陆'
+      }
+    },
+    {
+      path: '/ranking_list',
+      name: '生蚝单词-排行榜',
+      component: ranking_list,
+      meta:{
+        title: '生蚝单词-排行榜'
       }
     },
   ]
