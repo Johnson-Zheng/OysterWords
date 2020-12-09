@@ -145,9 +145,6 @@
   #td2_2,#td3_2{
     width: 280px;
   }
-  #td3_2{
-    background-color: #42b983;
-  }
   #td2_3,#td3_3{
     width: 100px;
     text-align: center;
