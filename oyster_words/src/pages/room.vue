@@ -26,6 +26,7 @@
 
 <script>
 import copyright from "../components/footer/copyright";
+import * as URL from "../global/interfaceURL";
 
 export default {
   name: "battleRoom",
@@ -46,11 +47,11 @@ export default {
       hostFaceURL: "../static/faces/f1.jpg",
 
       guestId: 0,
-      guestName: "",
+      guestName: "等待用户加入...",
       guestScore: 0,
       guestWinCnt: 0,
       guestFaceId: 0,
-      guestFaceURL: "../static/faces/f1.jpg",
+
 
     }
 
@@ -71,14 +72,34 @@ export default {
       this.hostFaceURL = "../static/faces/f" + this.hostFaceId + ".jpg";
 
       //加入房间用户信息
-      this.guestId = localStorage.getItem("guestId");
-      this.guestName = localStorage.getItem("guestName");
-      this.guestScore = localStorage.getItem("guestScore");
-      this.guestWinCnt = localStorage.getItem("guestWinCnt");
-      this.guestFaceId = localStorage.getItem("guestFaceId");
-      this.guestFaceURL = "../static/faces/f" + this.guestFaceId + ".jpg";
+
     },
-    //
+    //退出房间
+    quitRoom(){
+      this.$axios.get(URL.quitRoom, {params: {roomId: this.roomId}})
+        .then((res) => {
+          let code = res.data.respCode;
+          switch (code) {
+            case 1:
+              this.$message({
+                message: res.data.msg,
+                type: 'success'
+              });
+              // localStorage.removeItem("hostName");
+              // localStorage.removeItem("hostScore");
+              // localStorage.removeItem("hostFaceId");
+              // localStorage.removeItem("hostId");
+              // localStorage.removeItem("hostWinCnt");
+              // localStorage.removeItem("roomId");
+              this.$router.push('/index');
+              break;
+
+            default:
+              this.$message.error("系统异常");
+              break;
+          }
+        })
+    },
     //退出房间弹窗
     exit() {
       this.$confirm('是否要退出当前房间?', '提示', {
@@ -86,12 +107,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
-        this.$router.push('/index');
-        this.$message({
-          type: 'success',
-          message: '成功退出'
-        });
+        this.quitRoom();
       })
 
     }
