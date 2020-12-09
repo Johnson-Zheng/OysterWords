@@ -26,6 +26,7 @@ export default {
 
   data(){
     return{
+      faceURL:"../static/faces/f1.jpg",
 
     }
   },

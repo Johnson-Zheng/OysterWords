@@ -2,8 +2,9 @@
   <div id="root">
 
     <div id="header_bar">
-      <img id="face" alt="头像"/>
-      <p>{{ userId }}{{ username }}</p>
+      <el-avatar v-if="faceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
+      <el-avatar v-if="faceId!==0" size="100" fit="cover" :src="faceURL"></el-avatar>
+      <p>{{ username }}</p>
       <p>挑战胜场：{{ winCnt }}</p>
     </div>
 
@@ -37,6 +38,7 @@ export default {
       winCnt: 1,
       faceId: 0,
       score: 0,
+      faceURL:"../static/faces/f1.jpg",
 
     }
   },
@@ -51,6 +53,8 @@ export default {
       this.username = localStorage.getItem("username");
       this.winCnt = localStorage.getItem("winCnt");
       this.score = localStorage.getItem("score");
+      this.faceId = localStorage.getItem("faceId");
+      this.faceURL = "../static/faces/f"+this.faceId+".jpg";
 
     },
     //创建房间
@@ -123,7 +127,7 @@ export default {
     },
     //进入排行榜
     rankList(){
-      //this.$router.push('/room');
+      this.$router.push('/ranking_list');
     }
   }
 }
