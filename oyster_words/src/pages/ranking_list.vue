@@ -56,7 +56,7 @@
         userId:1,
         faceId:1,
         faceURL:"../static/faces/f1.jpg",
-        myname:"柚子甜",
+        myname:"柚子user甜",
         myrank:349,
         myscore:76532,
         rankData: [],
@@ -71,8 +71,8 @@
       get_UserInfor(){
         this.userId = localStorage.getItem("userId");
         this.faceId = localStorage.getItem("faceId");
-        this.username = localStorage.getItem("username");
-        this.score = localStorage.getItem("score");
+        this.myname = localStorage.getItem("username");
+        this.myscore = localStorage.getItem("score");
         this.faceURL = "../static/faces/f"+this.faceId+".jpg"
       },
       get_Rank(){
