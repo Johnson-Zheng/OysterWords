@@ -1,34 +1,72 @@
 <template>
   <div id="background" align="center">
+
     <el-dialog
-      title="昵称修改"
+      title="修改昵称"
       :visible.sync="dialogVisible"
       width="30%"
       :before-close="handleClose">
       <span>昵称:</span>
       <span>
-             <input id="newNickName" placeholder="请输入新的昵称"/>
+        <el-input v-model="newname" placeholder="请输入新的昵称"></el-input>
       </span>
       <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible = false">取 消</el-button><!--  修改了el-button的大小之后会导致字体无法居中 -->
-              <el-button type="primary" @click="dialogVisible = false">确 定</el-button><!--  修改了el-button的大小之后会导致字体无法居中 -->
+              <el-button @click="dialogVisible = false">取 消</el-button>
+              <el-button type="primary" @click="changeUserName()">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="修改密码"
+      :visible.sync="dialogVisible_1 "
+      width="30%"
+      :before-close="handleClose">
+      <span>旧密码:</span>
+      <span>
+        <el-input placeholder="请输入密码" v-model="oldPSW" show-password></el-input>
+      </span>
+      <span>新密码:</span>
+      <span>
+        <el-input placeholder="请输入密码" v-model="newPSW" show-password></el-input>
+      </span>
+      <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible_1 = false" >取 消</el-button>
+              <el-button type="primary" @click="changePSW()">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+      title="修改头像"
+      :visible.sync="dialogVisible_2"
+      width="30%"
+      :before-close="handleClose">
+      <span>昵称:</span>
+      <span>
+        <el-input v-model="newname" placeholder="请输入新的昵称"></el-input>
+      </span>
+      <span slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible_2 = false">取 消</el-button>
+              <el-button type="primary" @click="dialogVisible_2 = false">确 定</el-button>
       </span>
     </el-dialog>
     <div id="panel_selfInform" align="center">
 
-       <div id="img_self" style="color: #67c23a"><!-- 个人信息的头像-->
-         个人信息的头像
-       </div>
+      <div @click="dialogVisible_2= true">
+      <el-avatar v-if="faceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
+      <el-avatar v-if="faceId!==0" size="100" fit="cover" :src="faceURL"></el-avatar>
+      </div>
 
-
-       <div>
-         <div id="ID_self">ID:{{ID}}</div><br/>
-         <div id="nickName_self">昵称:{{nickName}}
-             <el-button id="BTN_change" @click="dialogVisible = true">修改</el-button><!--  修改了el-button的大小之后会导致字体无法居中 -->
+      <div>
+         <div id="ID_self">ID:{{userId}}</div><br/>
+         <div id="nickName_self">昵称:{{username}}
+         </div>
+         <div>
+           <button id="BTN_change" @click="dialogVisible = true" >修改昵称</button>
+           <button id="BTN_changePSW" @click="dialogVisible_1= true">修改密码</button>
          </div>
 
          </div><br/>
-             <button id="quit">注销</button>
+             <button id="quit" @click="goToLogin()">注销</button>
              <copyright/>
          </div>
         </div>
@@ -37,6 +75,7 @@
 
 <script>
   import copyright from "../components/footer/copyright";
+  import * as URL from "../global/interfaceURL"
     export default {
         name: "self_information",
       components:{
@@ -44,36 +83,119 @@
       },
       data(){
           return{
-            ID:"001",
-            nickName:"小柚子",
-            dialogVisible: false
+            userId:"11",
+            username:"pppp",
+            newname:"",
+            newPSW:"",
+            oldPSW:"",
+            dialogVisible: false,
+            dialogVisible_1:false,
+            dialogVisible_2:false,
+            faceId:"",
+            faceURL:"../static/faces/f1.jpg"
           };
       },
+      created() {
+        this.getUserdata()
+      },
       methods: {
-        handleClose(done) {
-          this.$confirm('确认关闭？')
-            .then(_ => {
-              done();
+
+        goToLogin(){
+          window.localStorage.clear()
+          this.$router.push('/login')
+        },
+
+        getUserdata(){
+          this.userId=localStorage.getItem("userId")
+          this.username=localStorage.getItem("username")
+          //this.faceId=localStorage.getItem("faceId")
+          //this.faceURL="../static/faces/f"+this.faceId+".jpg"
+        },
+          //修改密码
+        changePSW(){
+          let password=this.oldPSW  //获取input输入的旧密码
+          let newPassword=this.newPSW//获取input输入的新密码
+          //let username=this.username;//获取当前用户的username   //？？？
+
+
+          this.$axios.post(URL.resetPassword, {      //URL??
+            username:this.username,
+            password: password,
+            newPassword:newPassword
+          }).then((res)=>{
+            if(newPassword!=password){
+                this.$message({
+                  duration:2000,
+                  showClose:true,
+                  message: '修改成功',
+                  type: 'success'
+                });
+            }
+            else{
+              this.$message.error("修改失败")
+              this.loginLoading = false
+            }
+          })
+          },
+            //修改用户昵称
+          changeUserName() {
+            let username = this.username
+            this.$axios.get( URL.changeUsername+"?userId="+this.userId+"&username="+this.newname).then((res)=>{
+              let code = res.data.respCode
+              switch (code){
+                case 1:
+                  this.$message({
+                    duration:2000,
+                    showClose:true,
+                    message: res.data.msg,
+                    type: 'success'
+                  });
+                  break;
+                case 2:
+                  this.$message.error(res.data.msg)
+                  this.loginLoading = false
+                  break;
+                default:
+                  this.$message.error("系统异常")
+                  this.loginLoading = false
+                  break;
+              }
             })
-            .catch(_ => {});
-        }
-      }
+            },
+
+            //修改头像
+            changeUserface(){
+
+            }
+        },
     }
 </script>
 
 
 <style scoped>
-  #newNickName{
+  #newNickName,#oldPSW,#newPSW{
     height: 30px;
-    border: 1px solid #000000;
+    border: 1.5px solid #8c939d;  /*input输入框的边框样式*/
     border-radius: 4px;
   }
-  /*“修改”按钮的样式，但是设置样式之后会导致字体无法居中
+  #oldPSW{
+    margin-bottom: 10px;
+  }
   #BTN_change{
+    width: 80px;
     height: 30px;
-    width: 60px;
-    align-content: center;
-  }*/
+    background-color: rgba(255,255,255,0.98);
+    border: 1px solid #e9e9eb;
+    border-radius: 4px;
+  }
+  #BTN_changePSW{
+    width: 80px;
+    height: 30px;
+    background-color: rgba(255,255,255,0.98);
+    border: 1px solid #e9e9eb;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
   #background{
     width: 100vw;
     height: 100vh;
@@ -100,7 +222,8 @@
   }
   #nickName_self{
     position: relative;
-    left: 37px;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   #quit{
     width: 60px;

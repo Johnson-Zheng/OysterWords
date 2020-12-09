@@ -12,3 +12,6 @@ export const quitRoom = "http://39.107.84.0:8600/quitRoom";
 export const getRank = "http://39.107.84.0:8600/getRank";
 //查询房间
 export const queryRoom ="http://39.107.84.0:8600/queryRoom";
+export const resetPassword = "http://39.107.84.0:8600/resetPassword";
+export const changeUsername = "http://39.107.84.0:8600/changeUsername";
+export const changeFace = "http://39.107.84.0:8600/changeFace";
