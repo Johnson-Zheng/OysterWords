@@ -1,5 +1,5 @@
 <template>
-    <p id="copyright">©2020 生蚝单词开发小组 软件sy1701<br></p>
+    <p id="copyright">©2020 生蚝单词开发1小组 软件sy1701<br></p>
 </template>
 
 <script>
