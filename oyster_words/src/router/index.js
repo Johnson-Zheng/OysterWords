@@ -4,7 +4,6 @@ import index from "../pages/index";
 import login from "../pages/login.vue";
 import self_information from "../pages/self_information";
 import ranking_list from "../pages/ranking_list.vue";
-
 Vue.use(Router)
 
 export default new Router({
