@@ -3,14 +3,14 @@
 
     <div id="header_bar">
       <img id="face" alt="头像"/>
-      <p>{{userId}}{{username}}</p>
-      <p>挑战胜场：{{winCnt}}</p>
+      <p>{{ userId }}{{ username }}</p>
+      <p>挑战胜场：{{ winCnt }}</p>
     </div>
 
     <div id="content">
-      <button class="btn1">创建房间</button>
-      <button class="btn1">加入房间</button>
-      <button class="btn2">排行榜</button>
+      <el-button class="btn1" @click="createRoom()">创建房间</el-button>
+      <el-button class="btn1" @click="open()">加入房间</el-button>
+      <el-button class="btn2" @click="rankList()">排行榜</el-button>
     </div>
 
     <copyright></copyright>
@@ -19,76 +19,154 @@
 </template>
 
 <script>
-  import copyright from "../components/footer/copyright";
-  export default {
-        name: "index",
-    components:{
-          copyright,
-    },
+import copyright from "../components/footer/copyright";
+import httpServer from "../global/httpServer";
+import * as URL from "../global/interfaceURL";
 
-      data(){
+export default {
+  name: "index",
+  components: {
+    copyright,
+  },
 
-        return{
-          userId:0,
-          username:"test",
-          winCnt:1,
-          faceId:0,
-          score:0,
+  data() {
 
-        }
-      },
-      mounted(){
-          this.getUserData();
-      },
-      methods:{
-          getUserData(){
-            this.userId = localStorage.getItem("userId");
-            this.username = localStorage.getItem("username");
-            this.winCnt = localStorage.getItem("winCnt");
-            this.score = localStorage.getItem("score");
+    return {
+      userId: 0,
+      username: "test",
+      winCnt: 1,
+      faceId: 0,
+      score: 0,
 
-          }
-      }
     }
+  },
+  mounted() {
+    this.getUserData();
+
+  },
+  methods: {
+    //获得用户信息
+    getUserData() {
+      this.userId = localStorage.getItem("userId");
+      this.username = localStorage.getItem("username");
+      this.winCnt = localStorage.getItem("winCnt");
+      this.score = localStorage.getItem("score");
+
+    },
+    //创建房间
+    createRoom() {
+      this.$axios.get(URL.createRoom, {params: {hostId: this.userId}})
+        .then((res) => {
+          let code = res.data.respCode
+          switch (code) {
+            case 1:
+              this.$message({
+                message: '成功创建房间！',
+                type: 'success'
+              });
+              localStorage.setItem("hostName", this.username);
+              localStorage.setItem("hostScore", this.score);
+              localStorage.setItem("hostFaceId", this.faceId);
+              localStorage.setItem("hostId", this.userId);
+              localStorage.setItem("hostWinCnt", this.winCnt);
+              localStorage.setItem("roomId", res.data.roomId);
+              this.$router.push('/room');
+              break;
+
+            default:
+              this.$message.error("系统异常");
+              break;
+          }
+        })
+    },
+    //进入房间
+    enterRoom(roomId) {
+      this.$axios.get(URL.enterRoom, {params: {guestId: this.userId, roomId: roomId}})
+        .then((res) => {
+          let code = res.data.respCode
+          switch (code) {
+            case 1:
+              this.$message({
+                message: res.data.msg,
+                type: 'success',
+              });
+              localStorage.setItem("guestName", this.username);
+              localStorage.setItem("guestScore", this.score);
+              localStorage.setItem("guestFaceId", this.faceId);
+              localStorage.setItem("guestId", this.userId);
+              localStorage.setItem("guestWinCnt", this.winCnt);
+              localStorage.setItem("roomId", roomId);
+              this.$router.push('/room');
+              break;
+
+            case 2:
+              this.$message.error(res.data.msg);
+              break;
+
+            default:
+              this.$message.error("系统异常");
+              break;
+          }
+
+
+        })
+    },
+    //进入房间提示框（输入房间号）
+    open() {
+      this.$prompt('请输入房间号', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+
+      }).then(({value}) => {
+        this.enterRoom(value);
+      })
+    },
+    //进入排行榜
+    rankList(){
+      //this.$router.push('/room');
+    }
+  }
+}
 
 </script>
 
 <style scoped>
-  #root{
-    height: 700px;
-    width: 400px;
-    background-color: #FFCE7D;
-    text-align: center;
-  }
-  #header_bar{
-    background-color: #E6AA54;
-    height: 100px;
-    width: 350px;
-    margin: 50px 25px;
-  }
+#root {
+  height: 700px;
+  width: 400px;
+  background-color: #FFCE7D;
+  text-align: center;
+}
 
-  #header_bar p{
-    display: inline;
-    font-size: 1.5em;
-    padding: 20px;
-    line-height: 100px;
-  }
+#header_bar {
+  background-color: #E6AA54;
+  height: 100px;
+  width: 350px;
+  margin: 50px 25px;
+}
 
-  #content{
-    height: 450px;
-  }
+#header_bar p {
+  display: inline;
+  font-size: 1.5em;
+  padding: 20px;
+  line-height: 100px;
+}
 
-  .btn1{
-    height:100px;
-    margin: 20px;
-    width: 150px;
-  }
+#content {
+  height: 450px;
+}
 
-  .btn2{
-    height: 100px;
-    width: 300px;
-    margin: 20px;
-  }
+.btn1 {
+  height: 100px;
+  margin: 20px;
+  width: 150px;
+}
+
+.btn2 {
+  height: 100px;
+  width: 300px;
+  margin: 20px;
+}
 
 
 </style>
