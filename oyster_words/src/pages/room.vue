@@ -29,7 +29,7 @@ import copyright from "../components/footer/copyright";
 import * as URL from "../global/interfaceURL";
 
 export default {
-  name: "battleRoom",
+  name: "room",
   components: {
     copyright,
   },
@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       header_content: "等待好友进入...",
-      roomId: localStorage.getItem("roomId"),
+      roomId: 0,
 
       hostId: 0,
       hostName: "",
@@ -52,12 +52,22 @@ export default {
       guestWinCnt: 0,
       guestFaceId: 0,
 
+      loopId:null,
+      roomStatus:0,
+      hostStatus:0,
+      guestStatus:0,
+
 
     }
 
   },
-  mounted() {
+  created() {
+    this.roomId = this.$route.query.roomId;
     this.getUserData();
+  },
+  mounted() {
+    // this.loop();
+
 
   },
   methods: {
@@ -110,7 +120,17 @@ export default {
         this.quitRoom();
       })
 
-    }
+    },
+    //监听用户加入房间
+    // checkGuest(){
+    //
+    // },
+    //循环监听用户加入房间
+    // loop(){
+    //   this.checkGuest();
+    //   this.loopId = setInterval(checkGuest(),500)
+    //
+    // }
   }
 }
 </script>

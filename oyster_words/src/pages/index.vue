@@ -2,8 +2,8 @@
   <div id="root">
 
     <div id="header_bar">
-      <el-avatar v-if="faceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
-      <el-avatar v-if="faceId!==0" size="100" fit="cover" :src="faceURL"></el-avatar>
+      <el-avatar v-if="faceId===0"  fit="cover" icon="el-icon-user-solid"></el-avatar>
+      <el-avatar v-if="faceId!==0"  fit="cover" :src="faceURL"></el-avatar>
       <p>{{ username }}</p>
       <p>挑战胜场：{{ winCnt }}</p>
     </div>
@@ -73,8 +73,14 @@ export default {
               localStorage.setItem("hostFaceId", this.faceId);
               localStorage.setItem("hostId", this.userId);
               localStorage.setItem("hostWinCnt", this.winCnt);
-              localStorage.setItem("roomId", res.data.roomId);
-              this.$router.push('/room');
+              let roomId = res.data.roomId;
+              console.log(roomId)
+              this.$router.push({
+                path:'/room',
+                query: {
+                  roomId: roomId,
+                }
+              });
               break;
 
             default:

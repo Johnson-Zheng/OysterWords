@@ -10,3 +10,5 @@ export const enterRoom = "http://39.107.84.0:8600/enterRoom";
 export const quitRoom = "http://39.107.84.0:8600/quitRoom";
 //获取排行榜
 export const getRank = "http://39.107.84.0:8600/getRank";
+//查询房间
+export const queryRoom ="http://39.107.84.0:8600/queryRoom";
