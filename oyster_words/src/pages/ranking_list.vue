@@ -56,9 +56,9 @@
         userId:1,
         faceId:1,
         faceURL:"../static/faces/f1.jpg",
-        myname:"柚子user甜",
-        myrank:349,
-        myscore:76532,
+        myname:"柚子甜",
+        myrank:1,
+        myscore:1,
         rankData: [],
         faceList:[]
       }
@@ -99,7 +99,7 @@
   #image{
     width: 100%;
     height: 200px;
-    background-color: darkorchid;
+    background-color: #FFCE7D;
   }
   #my_score{
     padding: 20px;
@@ -114,7 +114,7 @@
   }
   #td1_1{
     width: 40px;
-    color: darkorchid;
+    color: #FFCE7D;
   }
   #td1_2{
     width: 40px;
@@ -124,11 +124,11 @@
   }
   #td1_4{
     width: 100px;
-    color: darkorchid;
+    color: #FFCE7D;
   }
   #td1_5{
     width: 100px;
-    color: darkorchid;
+    color: #FFCE7D;
   }
   #list{
     padding: 20px;
