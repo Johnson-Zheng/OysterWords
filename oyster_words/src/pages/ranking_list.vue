@@ -26,8 +26,12 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="(item,index) in rankData" height="40px">
-            <td id="td3_1">{{index+1}}</td>
+          <tr v-for="(item,index) in rankData">
+            <td id="td3_1">
+              <el-image style="height: 30px;width: 30px;" v-if="index >= 0 && index <= 2" fit="cover" :src=get_rankImageURL(index)></el-image>
+<!--              背景颜色、大小-->
+              <el-avatar  size="small" v-if="index >= 3">{{index+1}}</el-avatar>
+            </td>
             <td id="td3_2">
               <el-avatar v-if="item.faceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
               <el-avatar v-if="item.faceId!==0" size="100" fit="cover" :src="faceList[index]"></el-avatar>
@@ -60,7 +64,8 @@
         myrank:1,
         myscore:1,
         rankData: [],
-        faceList:[]
+        faceList:[],
+        rankImageURL:""
       }
     },
     created() {
@@ -68,18 +73,24 @@
       this.get_Rank()
     },
     methods:{
+      get_rankImageURL(index){
+        let num = index + 1;
+        this.rankImageURL = "../static/ranks/r"+num+".png";
+        return this.rankImageURL;
+      },
       get_UserInfor(){
         this.userId = localStorage.getItem("userId");
         this.faceId = localStorage.getItem("faceId");
         this.myname = localStorage.getItem("username");
-        this.myscore = localStorage.getItem("score");
         this.faceURL = "../static/faces/f"+this.faceId+".jpg"
       },
       get_Rank(){
         var _this = this;
         this.$axios.get(URL.getRank+"?userId="+this.userId)
           .then((res)=>{
-            let rank = res.data.yourRank
+            let rank = res.data.yourRank.rank
+            this.myname = res.data.yourRank.data.username
+            this.myscore = res.data.yourRank.data.score
             if(rank){
               this.myrank = rank
               this.rankData = res.data.allRank
@@ -96,11 +107,15 @@
 </script>
 
 <style scoped>
+  img{
+    user-select: none;
+  }
   #image{
     width: 100%;
     height: 200px;
     background-color: #FFCE7D;
   }
+
   #my_score{
     padding: 20px;
     height: max-content;
@@ -148,5 +163,10 @@
   #td2_3,#td3_3{
     width: 100px;
     text-align: center;
+  }
+  #td3_1 >>> .el-avatar{
+    user-select: none;
+    color:#AAAAAA;
+    background-color: #fafafa;
   }
 </style>
