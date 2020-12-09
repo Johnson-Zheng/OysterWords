@@ -40,20 +40,29 @@
       :visible.sync="dialogVisible_2"
       width="30%"
       :before-close="handleClose">
-      <span>昵称:</span>
-      <span>
-        <el-input v-model="newname" placeholder="请输入新的昵称"></el-input>
-      </span>
+      <el-row type="flex" justify="space-between">
+        <el-col  :span="3">
+          <el-avatar v-if="newfaceId===0" fit="cover" icon="el-icon-user-solid"></el-avatar>
+          <el-avatar v-if="newfaceId!==0" fit="cover" :src="newfaceURL"></el-avatar>
+        </el-col>
+        <el-col   :span="5">
+          <p v-if="newfaceId===0" style="height: 100%;margin: 0" >默认头像</p>
+          <p v-if="newfaceId!==0" style="height: 100%;margin: 0">头像{{newfaceId}}</p>
+        </el-col>
+        <el-col :span="10">
+          <el-input-number size="small" v-model="newfaceId" controls-position="right"  @change="selectFace(newfaceId)" :min="0" :max="20"></el-input-number>
+        </el-col>
+      </el-row>
       <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible_2 = false">取 消</el-button>
-              <el-button type="primary" @click="dialogVisible_2 = false">确 定</el-button>
+              <el-button @click="dialogVisible_2 = false" >取 消</el-button>
+              <el-button type="primary" @click="changeUserface()">确 定</el-button>
       </span>
     </el-dialog>
     <div id="panel_selfInform" align="center">
 
-      <div @click="dialogVisible_2= true">
-      <el-avatar v-if="faceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
-      <el-avatar v-if="faceId!==0" size="100" fit="cover" :src="faceURL"></el-avatar>
+      <div id="img" @click="dialogVisible_2= true">
+        <el-avatar v-if="faceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
+        <el-avatar v-if="faceId!==0" size="100" fit="cover" :src="faceURL"></el-avatar>
       </div>
 
       <div>
@@ -83,15 +92,17 @@
       },
       data(){
           return{
-            userId:"11",
-            username:"pppp",
+            userId:"",
+            username:"",
             newname:"",
             newPSW:"",
             oldPSW:"",
             dialogVisible: false,
             dialogVisible_1:false,
             dialogVisible_2:false,
-            faceId:"",
+            faceId:0,
+            newfaceId:0,
+            newfaceURL:"../static/faces/f1.jpg",
             faceURL:"../static/faces/f1.jpg"
           };
       },
@@ -108,8 +119,8 @@
         getUserdata(){
           this.userId=localStorage.getItem("userId")
           this.username=localStorage.getItem("username")
-          //this.faceId=localStorage.getItem("faceId")
-          //this.faceURL="../static/faces/f"+this.faceId+".jpg"
+          this.faceId=localStorage.getItem("faceId")
+          this.faceURL="../static/faces/f"+this.faceId+".jpg"
         },
           //修改密码
         changePSW(){
@@ -130,6 +141,7 @@
                   message: '修改成功',
                   type: 'success'
                 });
+              this.dialogVisible_1 = false;
             }
             else{
               this.$message.error("修改失败")
@@ -150,6 +162,9 @@
                     message: res.data.msg,
                     type: 'success'
                   });
+                  this.username = this.newname;
+                  localStorage.setItem("username",this.newname)
+                  this.dialogVisible = false;
                   break;
                 case 2:
                   this.$message.error(res.data.msg)
@@ -162,11 +177,45 @@
               }
             })
             },
-
             //修改头像
+            selectFace(id){
+              if(id===undefined){
+                this.newfaceId = 0
+                this.$message.warning("头像id异常，已设置为默认头像")
+                this.newfaceURL = "../static/faces/f"+id+".jpg"
+              }else{
+                this.newfaceURL = "../static/faces/f"+id+".jpg"
+              }
+            },
             changeUserface(){
+              let faceId = this.newfaceId
+              this.$axios.get( URL.changeFace+"?userId="+this.userId+"&faceId="+this.newfaceId).then((res)=>{
+                let code = res.data.respCode
+                switch (code){
+                  case 1:
+                    this.$message({
+                      duration:2000,
+                      showClose:true,
+                      message: res.data.msg,
+                      type: 'success'
+                    });
+                    this.faceURL = this.newfaceURL;
+                    localStorage.setItem("faceId",this.newfaceId)
+                    this.dialogVisible_2 = false;
+                    break;
+                  case 2:
+                    this.$message.error(res.data.msg)
+                    this.loginLoading = false
+                    break;
+                  default:
+                    this.$message.error("系统异常")
+                    this.loginLoading = false
+                    break;
+                }
+              })
 
             }
+
         },
     }
 </script>
@@ -213,8 +262,14 @@
     border-radius: 15px;
     padding-top: 5%;
   }
-  #img_self{
-    margin-bottom: 20px;
+  #img{
+    transition: all ease-in-out 0.3s;
+    cursor: pointer;
+    width: max-content;
+  }
+  #img:hover{
+    transform: scale(1.1);
+    transition: all ease-in-out 0.3s;
   }
   #ID_self{
     position: absolute;
