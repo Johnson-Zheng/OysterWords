@@ -11,7 +11,8 @@
     <div id="content">
       <el-button class="btn1" @click="createRoom()">创建房间</el-button>
       <el-button class="btn1" @click="open()">加入房间</el-button>
-      <el-button class="btn2" @click="rankList()">排行榜</el-button>
+      <el-button class="btn1" @click="self()">个人信息</el-button>
+      <el-button class="btn1" @click="rankList()">排行榜</el-button>
     </div>
 
     <copyright></copyright>
@@ -134,6 +135,10 @@ export default {
     //进入排行榜
     rankList(){
       this.$router.push('/ranking_list');
+    },
+    //个人信息
+    self(){
+      this.$router.push('/self_information');
     }
   }
 }
@@ -172,11 +177,7 @@ export default {
   width: 150px;
 }
 
-.btn2 {
-  height: 100px;
-  width: 300px;
-  margin: 20px;
-}
+
 
 
 </style>
