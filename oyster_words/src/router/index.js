@@ -5,7 +5,7 @@ import login from "../pages/login.vue";
 import self_information from "../pages/self_information";
 import ranking_list from "../pages/ranking_list.vue";
 import room from "../pages/room";
-import battle from "../pages/battle";
+
 
 Vue.use(Router)
 
@@ -56,13 +56,6 @@ export default new Router({
         title: '生蚝单词-房间界面'
       }
     },
-    {
-      path: '/battle',
-      name:'生蚝单词-对战界面',
-      component: battle,
-      meta: {
-        title: '生蚝单词-对战界面'
-      }
-    },
+
   ]
 })

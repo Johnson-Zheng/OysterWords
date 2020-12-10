@@ -57,6 +57,13 @@ export default {
       this.faceId = localStorage.getItem("faceId");
       this.faceURL = "../static/faces/f"+this.faceId+".jpg";
 
+      this.$axios.get(URL.getQuestions, {params: {roomId: 10}})
+        .then((res) => {
+          let questionList = res.data.data ;
+          console.log(questionList[0]);
+
+        })
+
     },
     //创建房间
     createRoom() {
@@ -69,13 +76,13 @@ export default {
                 message: '成功创建房间！',
                 type: 'success'
               });
-              localStorage.setItem("hostName", this.username);
-              localStorage.setItem("hostScore", this.score);
-              localStorage.setItem("hostFaceId", this.faceId);
-              localStorage.setItem("hostId", this.userId);
-              localStorage.setItem("hostWinCnt", this.winCnt);
+              // localStorage.setItem("hostName", this.username);
+              // localStorage.setItem("hostScore", this.score);
+              // localStorage.setItem("hostFaceId", this.faceId);
+              // localStorage.setItem("hostId", this.userId);
+              // localStorage.setItem("hostWinCnt", this.winCnt);
               let roomId = res.data.roomId;
-              console.log(roomId)
+
               this.$router.push({
                 path:'/room',
                 query: {
@@ -101,13 +108,18 @@ export default {
                 message: res.data.msg,
                 type: 'success',
               });
-              localStorage.setItem("guestName", this.username);
-              localStorage.setItem("guestScore", this.score);
-              localStorage.setItem("guestFaceId", this.faceId);
-              localStorage.setItem("guestId", this.userId);
-              localStorage.setItem("guestWinCnt", this.winCnt);
-              localStorage.setItem("roomId", roomId);
-              this.$router.push('/room');
+              // localStorage.setItem("guestName", this.username);
+              // localStorage.setItem("guestScore", this.score);
+              // localStorage.setItem("guestFaceId", this.faceId);
+              // localStorage.setItem("guestId", this.userId);
+              // localStorage.setItem("guestWinCnt", this.winCnt);
+              // localStorage.setItem("roomId", roomId);
+              this.$router.push({
+                path:'/room',
+                query: {
+                  roomId: roomId,
+                }
+              });
               break;
 
             case 2:
