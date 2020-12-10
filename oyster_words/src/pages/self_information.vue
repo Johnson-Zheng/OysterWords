@@ -6,10 +6,12 @@
       :visible.sync="dialogVisible"
       width="30%"
       :before-close="handleClose">
-      <span>昵称:</span>
-      <span>
-        <el-input v-model="newname" placeholder="请输入新的昵称"></el-input>
-      </span>
+      <el-row>
+      <el-col span="4" :offset="3"  >昵称:</el-col>
+      <el-col span="13">
+        <el-input id="newname" v-model="newname" placeholder="请输入新的昵称"></el-input>
+      </el-col>
+      </el-row>
       <span slot="footer" class="dialog-footer">
               <el-button @click="dialogVisible = false">取 消</el-button>
               <el-button type="primary" @click="changeUserName()">确 定</el-button>
@@ -21,14 +23,19 @@
       :visible.sync="dialogVisible_1 "
       width="30%"
       :before-close="handleClose">
-      <span>旧密码:</span>
-      <span>
-        <el-input placeholder="请输入密码" v-model="oldPSW" show-password></el-input>
-      </span>
-      <span>新密码:</span>
-      <span>
-        <el-input placeholder="请输入密码" v-model="newPSW" show-password></el-input>
-      </span>
+      <el-row style="margin-bottom: 20px">
+        <el-col span="4" :offset="3">旧密码:</el-col>
+        <el-col span="13">
+          <el-input placeholder="请输入密码" v-model="oldPSW" show-password></el-input>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col span="4" :offset="3">新密码:</el-col>
+        <el-col span="13">
+          <el-input placeholder="请输入密码" v-model="newPSW" show-password></el-input>
+        </el-col>
+      </el-row>
       <span slot="footer" class="dialog-footer">
               <el-button @click="dialogVisible_1 = false" >取 消</el-button>
               <el-button type="primary" @click="changePSW()">确 定</el-button>
@@ -70,12 +77,12 @@
          <div id="nickName_self">昵称:{{username}}
          </div>
          <div>
-           <button id="BTN_change" @click="dialogVisible = true" >修改昵称</button>
-           <button id="BTN_changePSW" @click="dialogVisible_1= true">修改密码</button>
+           <el-button id="BTN_change" @click="dialogVisible = true" size="small" plain>修改昵称</el-button>
+           <el-button id="BTN_changePSW" @click="dialogVisible_1= true" size="small" plain>修改密码</el-button>
          </div>
 
          </div><br/>
-             <button id="quit" @click="goToLogin()">注销</button>
+             <el-button id="quit" @click="goToLogin" size="small"  type="danger" plain>注销</el-button>
              <copyright/>
          </div>
         </div>
@@ -126,10 +133,9 @@
         changePSW(){
           let password=this.oldPSW  //获取input输入的旧密码
           let newPassword=this.newPSW//获取input输入的新密码
-          //let username=this.username;//获取当前用户的username   //？？？
 
 
-          this.$axios.post(URL.resetPassword, {      //URL??
+          this.$axios.post(URL.resetPassword, {
             username:this.username,
             password: password,
             newPassword:newPassword
@@ -232,17 +238,9 @@
   }
   #BTN_change{
     width: 80px;
-    height: 30px;
-    background-color: rgba(255,255,255,0.98);
-    border: 1px solid #e9e9eb;
-    border-radius: 4px;
   }
   #BTN_changePSW{
     width: 80px;
-    height: 30px;
-    background-color: rgba(255,255,255,0.98);
-    border: 1px solid #e9e9eb;
-    border-radius: 4px;
     margin-top: 10px;
   }
   #background{
@@ -281,11 +279,9 @@
     margin-bottom: 10px;
   }
   #quit{
-    width: 60px;
-    height: 30px;
-    background-color: rgba(255,255,255,0.98);
-    border: 1px solid #e9e9eb;
-    border-radius: 4px;
+    width: 160px;
   }
+
+
 
 </style>
