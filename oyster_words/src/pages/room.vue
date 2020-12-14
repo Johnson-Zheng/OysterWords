@@ -48,6 +48,7 @@ export default {
 
   data() {
     return {
+      userIsHost: true,
       //房间信息
       header_content: "等待好友进入...",
       roomId: 0,
@@ -78,26 +79,21 @@ export default {
         "C:示例选项C",
         "D:示例选项D",
       ],
-
-
     }
-
   },
   created() {
+    this.userIsHost = this.$route.params.userIsHost;
     this.roomId = this.$route.query.roomId;
     this.dataInit();
   },
   mounted() {
     this.loop();
-
-
   },
   methods: {
     //初始化房间信息
     dataInit() {
       this.$axios.get(URL.queryRoom, {params: {roomId: this.roomId}})
         .then((res) => {
-
           //初始化host的信息
           this.hostStatus = res.data.data.hostStatus;
           this.hostId = res.data.data.hostId;
@@ -111,16 +107,14 @@ export default {
           this.guestName = res.data.data.guestInfo.username;
           this.guestFaceId = res.data.data.guestInfo.faceId;
           this.guestCurScore = res.data.data.guestScore;
-          this.guestFaceURL = "../static/faces/f" + this.hostFaceId + ".jpg";
-
+          this.guestFaceURL = "../static/faces/f" + this.guestFaceId + ".jpg";
         })
-
     },
     //监听房间状态
     check() {
       this.$axios.get(URL.queryRoom, {params: {roomId: this.roomId}})
         .then((res) =>{
-
+          //访客未加入时
           if (this.hostStatus === 1 && res.data.data.guestStatus === 0) {
             this.hostStatus = res.data.data.hostStatus;
             this.hostId = res.data.data.hostId;
@@ -128,7 +122,6 @@ export default {
             this.hostFaceId = res.data.data.hostInfo.faceId;
             this.hostCurScore = res.data.data.hostScore;
             this.hostFaceURL = "../static/faces/f" + this.hostFaceId + ".jpg";
-
           }
           //若host和guest都在房间则开始游戏
           if (this.hostStatus === 1 && res.data.data.guestStatus === 1) {
@@ -166,11 +159,7 @@ export default {
       this.$axios.get(URL.getQuestions, {params: {roomId: this.roomId}})
         .then((res) => {
           let questionList = res.data.data;
-
-
-
         })
-
     },
     //退出房间弹窗
     exit() {
@@ -181,7 +170,6 @@ export default {
       }).then(() => {
         this.quitRoom();
       })
-
     },
     //退出房间
     quitRoom() {
@@ -197,7 +185,6 @@ export default {
               });
               this.$router.push('/index');
               break;
-
             default:
               this.$message.error("系统异常");
               break;

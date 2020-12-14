@@ -72,19 +72,16 @@ export default {
           let code = res.data.respCode
           switch (code) {
             case 1:
+              let roomId = res.data.roomId;
               this.$message({
-                message: '成功创建房间！',
+                message: '房间（ID'+roomId+'）创建成功，请将房间ID发送给好友',
                 type: 'success'
               });
-              // localStorage.setItem("hostName", this.username);
-              // localStorage.setItem("hostScore", this.score);
-              // localStorage.setItem("hostFaceId", this.faceId);
-              // localStorage.setItem("hostId", this.userId);
-              // localStorage.setItem("hostWinCnt", this.winCnt);
-              let roomId = res.data.roomId;
-
               this.$router.push({
                 path:'/room',
+                params:{
+                  userIsHost:true,
+                },
                 query: {
                   roomId: roomId,
                 }
@@ -108,14 +105,11 @@ export default {
                 message: res.data.msg,
                 type: 'success',
               });
-              // localStorage.setItem("guestName", this.username);
-              // localStorage.setItem("guestScore", this.score);
-              // localStorage.setItem("guestFaceId", this.faceId);
-              // localStorage.setItem("guestId", this.userId);
-              // localStorage.setItem("guestWinCnt", this.winCnt);
-              // localStorage.setItem("roomId", roomId);
               this.$router.push({
                 path:'/room',
+                params:{
+                  userIsHost:false,
+                },
                 query: {
                   roomId: roomId,
                 }

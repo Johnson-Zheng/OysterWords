@@ -1,67 +1,78 @@
 <template>
   <div id="container">
-    <div class="bg"></div>
-    <div id="panel" class="panel_shadow">
-          <div id="login-panel">
-              <el-tabs v-model="tabSelect" align="center">
-                  <el-tab-pane label="登陆" name="first">
-                      <el-form label-position="left"
-                              ref="form"
-                              :rules="login_rules"
-                              status-icon :model="login_form" label-width="80px" class="mt-30">
-                          <el-form-item label="用户名" prop="username" style="margin-top:40px">
-                              <el-input v-model="login_form.username" placeholder="请输入用户名"/>
-                          </el-form-item>
-                          <el-form-item label="密码" prop="password" style="margin-bottom:40px">
-                              <el-input placeholder="请输入密码" v-model="login_form.password" show-password/>
-                          </el-form-item>
-                          <el-col :span="24" class="mt-30" style="margin-bottom:10px">
-                            <el-button round type="primary" style="width:100%;" @click="user_login(login_form)" :loading='loginLoading'>登陆</el-button>
-                          </el-col>
-                        </el-form>
-                  </el-tab-pane>
-                  <el-tab-pane label="注册" name="second">
-                      <el-form label-position="left"
-                               ref="register_form"
-                               :rules="register_rules"
-                               status-icon :model="register_form" label-width="80px" class="mt-30">
-                        <el-form-item label="头像" prop="faceid" style="margin-top:40px">
-                          <el-row type="flex" justify="space-between">
-                            <el-col  :span="3">
-                              <el-avatar v-if="register_form.faceid===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
-                              <el-avatar v-if="register_form.faceid!==0" size="100" fit="cover" :src="faceURL"></el-avatar>
-                            </el-col>
-                            <el-col   :span="5">
-                              <p v-if="register_form.faceid===0" style="height: 100%;margin: 0" >默认头像</p>
-                              <p v-if="register_form.faceid!==0" style="height: 100%;margin: 0">头像{{register_form.faceid}}</p>
-                            </el-col>
-                            <el-col :span="10">
-                              <el-input-number size="small" v-model="register_form.faceid" controls-position="right"  @change="selectFace(register_form.faceid)" :min="0" :max="20"></el-input-number>
-                            </el-col>
-                          </el-row>
+
+    <header>
+      <h1>OYSTER</h1>
+      <h2>生蚝单词</h2>
+
+    </header>
+
+    <div id="form" style="background-color: #98d4f3;height: 80vh">
+      <div class="fish" id="fish"></div>
+      <div class="fish" id="fish2"></div>
+      <div class="fish" id="fish3"></div>
+      <div id="panel" class="panel_shadow">
+        <div id="login-panel">
+          <el-tabs v-model="tabSelect" align="center">
+            <el-tab-pane label="登陆" name="first">
+              <el-form label-position="left"
+                       ref="form"
+                       :rules="login_rules"
+                       status-icon :model="login_form" label-width="80px" class="mt-30">
+                <el-form-item label="用户名" prop="username" style="margin-top:40px">
+                  <el-input v-model="login_form.username" placeholder="请输入用户名"/>
+                </el-form-item>
+                <el-form-item label="密码" prop="password" style="margin-bottom:40px">
+                  <el-input placeholder="请输入密码" v-model="login_form.password" show-password/>
+                </el-form-item>
+                <el-col :span="24" class="mt-30" style="margin-bottom:10px">
+                  <el-button round type="primary" style="width:100%;" @click="user_login(login_form)" :loading='loginLoading'>登陆</el-button>
+                </el-col>
+              </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="注册" name="second">
+              <el-form label-position="left"
+                       ref="register_form"
+                       :rules="register_rules"
+                       status-icon :model="register_form" label-width="80px" class="mt-30">
+                <el-form-item label="头像" prop="faceid" style="margin-top:40px">
+                  <el-row type="flex" justify="space-between">
+                    <el-col  :span="3">
+                      <el-avatar v-if="register_form.faceid===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
+                      <el-avatar v-if="register_form.faceid!==0" size="100" fit="cover" :src="faceURL"></el-avatar>
+                    </el-col>
+                    <el-col   :span="5">
+                      <p v-if="register_form.faceid===0" style="height: 100%;margin: 0" >默认头像</p>
+                      <p v-if="register_form.faceid!==0" style="height: 100%;margin: 0">头像{{register_form.faceid}}</p>
+                    </el-col>
+                    <el-col :span="10">
+                      <el-input-number size="small" v-model="register_form.faceid" controls-position="right"  @change="selectFace(register_form.faceid)" :min="0" :max="20"></el-input-number>
+                    </el-col>
+                  </el-row>
 
 
-                        </el-form-item>
-                          <el-form-item label="用户名" prop="username" >
-                              <el-input v-model="register_form.username" placeholder="请输入用户名"/>
-                          </el-form-item>
-                          <el-form-item label="密码" prop="password">
-                              <el-input placeholder="请输入密码" v-model="register_form.password" show-password/>
-                          </el-form-item>
-                          <el-form-item label="重复密码" prop="password2">
-                              <el-input placeholder="请再次输入密码" v-model="register_form.password2" show-password/>
-                          </el-form-item>
+                </el-form-item>
+                <el-form-item label="用户名" prop="username" >
+                  <el-input v-model="register_form.username" placeholder="请输入用户名"/>
+                </el-form-item>
+                <el-form-item label="密码" prop="password">
+                  <el-input placeholder="请输入密码" v-model="register_form.password" show-password/>
+                </el-form-item>
+                <el-form-item label="重复密码" prop="password2">
+                  <el-input placeholder="请再次输入密码" v-model="register_form.password2" show-password/>
+                </el-form-item>
 
-                          <el-col :span="24">
-                            <el-button type="primary" style="width:100%;" :loading='regLoading' @click="register(register_form)">注册</el-button>
-                          </el-col>
-                      </el-form>
-                  </el-tab-pane>
-              </el-tabs>
-          </div>
-          <copyright style="margin-bottom: 0;"> </copyright>
+                <el-col :span="24">
+                  <el-button type="primary" style="width:100%;" :loading='regLoading' @click="register(register_form)">注册</el-button>
+                </el-col>
+              </el-form>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
 
       </div>
+    </div>
+    <copyright> </copyright>
   </div>
 </template>
 
@@ -181,7 +192,6 @@
                 type: 'warning'
             });
         }
-
     },
     register(register_form) {
       this.regLoading = true
@@ -241,41 +251,26 @@
 </script>
 
 <style scoped>
-    .bg{
-      width: 100vw;
-      height: 100vh;
-      background-color: #58a1ff;
-    }
-    #container{
-      min-height: 100%;
-
-    }
-
-    #logo{
-        position: absolute;
-        left: 10vw;
-        top:5vh;
-        height:66px;
-        object-fit: cover;
-    }
-    #img1{
-        position: absolute;
-        left: 10vw;
-        top: 15vh;
-        width: 711px;
-        height:546px;
-        object-fit: cover;
-    }
-
+  @import url(https://fonts.googleapis.com/css?family=Sniglet|Raleway:900);
+  html,body{
+    overflow: hidden !important;
+  }
+  ::-webkit-scrollbar {
+    width: 0;
+  }
+  #container{
+    min-height: 100%;
+    overflow: hidden;
+  }
   #panel{
     left: 50%;
-    top:50%;
+    background: white;
+    top:55%;
     transform: translate(-50%,-50%);
     width:350px;
     position: absolute;
     transition: all ease-in-out 0.3s;
   }
-
   #login-panel >>> .el-tabs__item {
       width: 175px;
   }
@@ -285,9 +280,84 @@
   #login-panel >>> .el-input-number{
       width: 100%;
   }
+  h1{
+    font-weight: bold;
+    font-size: 3.6em;
+    font-family: 'Raleway', sans-serif;
+    margin: 0 auto;
+    margin-top: 30px;
+    width: 500px;
+    color: #F90;
+    text-align: center;
+  }
+  h2{
+    font-weight: 700;
+    font-size: 2em;
+    letter-spacing: 10px;
+    margin: 0 auto;
+    color: #F90;
+    text-align: center;
+  }
+
+  /* Animation webkit */
+  @-webkit-keyframes myfirst
+  {
+    0% {
+      margin-left: -235px;
+      transform: scale(1.2);
+    }
+    90% {
+      margin-left: 100%;
+      transform: scale(1.0);
+    }
+    100% {
+      margin-left: 100%;
+    }
+  }
+
+  /* Animation */
+  @keyframes myfirst
+  {
+    0% {margin-left: -235px}
+    70% {margin-left: 100%;}
+    100% {margin-left: 100%;}
+  }
+
+  .fish{
+    background:url("../assets/fish.png");
+    width: 235px;
+    height: 104px;
+    margin-left: -235px;
+    position: absolute;
+    animation: myfirst 12s;
+    -webkit-animation: myfirst 12s;
+    animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    -webkit-animation-timing-function: ease-in-out;
+  }
+
+  #fish{
+    top: 30%;
+  }
+
+  #fish2{
+    top: 50%;
+    animation-delay: 3s;
+    -webkit-animation-delay: 3s;
+  }
+
+  #fish3{
+    top: 80%;
+    animation-delay: 8s;
+    -webkit-animation-delay: 8s;
+  }
 
 
-
+  header{
+    height: 160px;
+    background: url('../assets/golf.png') repeat-x bottom;
+  }
 
 </style>
 

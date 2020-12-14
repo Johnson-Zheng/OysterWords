@@ -1,49 +1,66 @@
 <template>
+
   <div align="center">
-    <div id="image">插入顶部图片</div>
-    <div id="ranking_list">
-      <div id="my_score">
-        <table>
-          <tr id="tr1">
-            <td id="td1_1">我的成绩</td>
-            <td id="td1_2">
-              <el-avatar v-if="faceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
-              <el-avatar v-if="faceId!==0" size="100" fit="cover" :src="faceURL"></el-avatar>
-            </td>
-            <td id="td1_3">{{myname}}</td>
-            <td id="td1_4">第{{myrank}}名</td>
-            <td id="td1_5">{{myscore}}分</td>
-          </tr>
-        </table>
-      </div>
-      <div id="list">
-        <table>
-          <thead>
-          <tr>
-            <td id="td2_1">排名</td>
-            <td id="td2_2">昵称</td>
-            <td id="td2_3">分数</td>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="(item,index) in rankData">
-            <td id="td3_1">
-              <el-image style="height: 30px;width: 30px;" v-if="index >= 0 && index <= 2" fit="cover" :src=get_rankImageURL(index)></el-image>
-<!--              背景颜色、大小-->
-              <el-avatar  size="small" v-if="index >= 3">{{index+1}}</el-avatar>
-            </td>
-            <td id="td3_2">
-              <el-avatar v-if="item.faceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
-              <el-avatar v-if="item.faceId!==0" size="100" fit="cover" :src="faceList[index]"></el-avatar>
-              {{item.username}}
-            </td>
-            <td id="td3_3">{{item.score}}</td>
-          </tr>
-          </tbody>
-        </table>
+    <header>
+      <h1>Rank</h1>
+      <h2>排行榜</h2>
+
+    </header>
+    <div id="form" style="background-color: #98d4f3;height: 100vh;width: 100vw">
+      <div class="fish" id="fish"></div>
+      <div class="fish" id="fish2"></div>
+      <div class="fish" id="fish3"></div>
+      <div id="ranking_list">
+        <div id="list" class="panel_shadow">
+          <el-page-header @back="back()"></el-page-header>
+          <div id="my_score" class="panel_shadow">
+            <table style="width: 100%">
+              <tr id="tr1">
+                <td id="td1_1">我的<br>成绩</td>
+                <td id="td1_2">
+                  <el-avatar v-if="faceId===0" :size="40" fit="cover" icon="el-icon-user-solid"></el-avatar>
+                  <el-avatar v-if="faceId!==0" :size="40" fit="cover" :src="faceURL"></el-avatar>
+                </td>
+                <td id="td1_3">{{myname}}</td>
+                <td id="td1_4">第{{myrank}}名</td>
+                <td id="td1_5">{{myscore}}分</td>
+              </tr>
+            </table>
+          </div>
+          <table style="margin-top: 10px;margin-left: -30px">
+            <thead>
+              <tr>
+                <td id="td2_1">排名</td>
+                <td id="td2_2">头像</td>
+                <td id="td2_3">昵称</td>
+                <td id="td2_4">分数</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item,index) in rankData">
+                <td id="td3_1">
+                  <el-image style="height: 30px;width: 30px;" v-if="index >= 0 && index <= 2" fit="cover" :src=get_rankImageURL(index)></el-image>
+    <!--              背景颜色、大小-->
+                  <el-avatar  size="small" v-if="index >= 3">{{index+1}}</el-avatar>
+                </td>
+                <td id="td3_2">
+                  <el-avatar v-if="item.faceId===0" :size="40" fit="cover" icon="el-icon-user-solid"></el-avatar>
+                  <el-avatar v-if="item.faceId!==0" :size="40" fit="cover" :src="faceList[index]"></el-avatar>
+
+                </td>
+                <td id="td3_3">
+                  <p class="username">{{item.username}}</p>
+                </td>
+                <td id="td3_4">
+                  <p class="userscore">{{item.score}}</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-    <copyright></copyright>
+    <copyright style="bottom: -100px"></copyright>
   </div>
 </template>
 
@@ -71,6 +88,9 @@
     created() {
       this.get_UserInfor()
       this.get_Rank()
+
+    },
+    mounted() {
     },
     methods:{
       get_rankImageURL(index){
@@ -101,72 +121,184 @@
               this.$message.error("系统异常")
             }
         })
-      }
+      },
+      back(){
+        this.$router.go(-1);//返回上一层
+      },
     }
   }
 </script>
 
 <style scoped>
+  @import url("https://fonts.googleapis.com/css?family=Sniglet|Raleway:900");
   img{
     user-select: none;
   }
-  #image{
-    width: 100%;
-    height: 200px;
-    background-color: #FFCE7D;
+  thead td{
+    font-weight: bold;
+    font-size: 14px;
+    color:#aaaaaa
   }
-
   #my_score{
-    padding: 20px;
+    background: white;
+    padding: 10px;
     height: max-content;
-    width: max-content;
-    border-radius: 10px;
+
+    border-radius: 20px;
     margin-top: 20px;
-    box-shadow: lightgray 10px 10px 30px 5px ;
   }
   #tr1{
-    height: 60px;
+    line-height: 20px;
+    height: 40px;
   }
   #td1_1{
-    width: 40px;
-    color: #FFCE7D;
+    text-align: center;
+    line-height: 20px;
+    height: 40px;
+    width: 50px;
+    color: #F90;
   }
   #td1_2{
-    width: 40px;
+    text-align: center;
+    line-height: 20px;
+    height: 40px;
+    width: 70px;
   }
   #td1_3{
-    width: 240px;
+    line-height: 20px;
+    height: 40px;
+    width:100px;
   }
   #td1_4{
+    line-height: 20px;
+    height: 40px;
     width: 100px;
-    color: #FFCE7D;
+    color: #F90;
   }
   #td1_5{
-    width: 100px;
-    color: #FFCE7D;
+    text-align: center;
+    line-height: 20px;
+    height: 40px;
+    width: 80px;
+    color: #F90;
   }
   #list{
+    position: absolute;
+    left: 50%;
+    top:30%;
+    transform: translate(-50%);
     padding: 20px;
-    width: max-content;
+    width: 450px;
     height: max-content;
-    border-radius: 10px;
-    box-shadow: lightgray 10px 10px 30px 5px ;
-    margin-top: 20px;
+    border-radius: 20px;
+    background: white;
   }
   #td2_1,#td3_1{
-    width: 80px;
+    width: 75px;
     text-align: center;
   }
-  #td2_2,#td3_2{
-    width: 280px;
+  #td2_2{
+    width: 40px;
+    text-align: left;
+  }
+  #td3_2{
+    width: 50px;
+    text-align: left;
   }
   #td2_3,#td3_3{
-    width: 100px;
+    width: 230px;
+    text-align: left;
+  }
+  #td2_4,#td3_4{
+    width: 50px;
     text-align: center;
   }
   #td3_1 >>> .el-avatar{
     user-select: none;
-    color:#AAAAAA;
-    background-color: #fafafa;
+    color: #9f9f9f;
+    background-color: #f5f5f5;
+  }
+
+  h1{
+    font-weight: bold;
+    font-size: 3.6em;
+    font-family: 'Raleway', sans-serif;
+    margin: 0 auto;
+    margin-top: 30px;
+    width: 500px;
+    color: #F90;
+    text-align: center;
+  }
+  h2{
+    font-weight: 700;
+    font-size: 2em;
+    letter-spacing: 10px;
+    margin: 0 auto;
+    color: #F90;
+    text-align: center;
+  }
+
+  /* Animation webkit */
+  @-webkit-keyframes myfirst
+  {
+    0% {
+      margin-left: -235px;
+      transform: scale(1.2);
+    }
+    90% {
+      margin-left: 100%;
+      transform: scale(1.0);
+    }
+    100% {
+      margin-left: 100%;
+    }
+  }
+
+  /* Animation */
+  @keyframes myfirst
+  {
+    0% {margin-left: -235px}
+    70% {margin-left: 100%;}
+    100% {margin-left: 100%;}
+  }
+
+  .fish{
+    background:url("../assets/fish.png");
+    width: 235px;
+    height: 104px;
+    margin-left: -235px;
+    position: absolute;
+    animation: myfirst 12s;
+    -webkit-animation: myfirst 12s;
+    animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    -webkit-animation-timing-function: ease-in-out;
+  }
+
+  #fish{
+    top: 30%;
+  }
+
+  #fish2{
+    top: 50%;
+    animation-delay: 3s;
+    -webkit-animation-delay: 3s;
+  }
+
+  #fish3{
+    top: 80%;
+    animation-delay: 8s;
+    -webkit-animation-delay: 8s;
+  }
+
+
+  header{
+    height: 160px;
+    background: url('../assets/golf.png') repeat-x bottom;
+  }
+  .username{
+    font-size: 16px;
+    font-weight: bold;
   }
 </style>

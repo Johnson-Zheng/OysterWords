@@ -1,5 +1,5 @@
 <template>
-    <p id="copyright">©2020 生蚝单词开发1小组 软件sy1701<br></p>
+    <p id="copyright">©2020 生蚝单词开发小组 软件sy1701<br></p>
 </template>
 
 <script>
@@ -10,17 +10,16 @@
 
 <style scoped>
     #copyright{
-        position:relative;
-        font-size:12px;
-        margin-top:30px;
-        margin-bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-weight:400;
-        line-height:20px;
-        color:rgba(188,188,188,1);
-        opacity:1;
-        text-align: center;
-        user-select: none;
+      position:absolute;
+      font-size:14px;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight:400;
+      line-height:20px;
+      color:white;
+      opacity:1;
+      text-align: center;
+      user-select: none;
     }
 </style>

@@ -13,6 +13,7 @@ export default {
 <style>
   body{
     margin: 0!important;
+    overflow-x: hidden;
   }
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -23,13 +24,10 @@ export default {
     width:100%;
   }
   .panel_shadow{
-    position: absolute;
-    z-index: 99;
     height:max-content;
-    background: rgb(255, 255, 255) !important;
     box-shadow:0 5px 20px rgba(0,0,0,0.07);
     opacity:1;
-    border-radius:15px;
+    border-radius:30px;
     padding:20px 30px 30px 35px;
   }
   .forget{
