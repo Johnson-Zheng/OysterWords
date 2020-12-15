@@ -1,22 +1,38 @@
 <template>
   <div id="root">
-    <h1>对战房间</h1>
-    <p>等待好友进入...</p>
-    <p>房间{{ roomId }}</p>
-    <div id="container">
-      <div class="user_info">
-        <el-avatar v-if="hostFaceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
-        <el-avatar v-if="hostFaceId!==0" size="100" fit="cover" :src="hostFaceURL"></el-avatar>
-        <p>{{ hostName }}</p>
+    <header>
+      <h1>BATTLE ROOM</h1>
+      <h2>对战房间</h2>
+    </header>
+
+    <div id="container" style="background-color: #98d4f3;height: 400px">
+      <div class="fish" id="fish"></div>
+      <div class="fish" id="fish2"></div>
+      <div class="fish" id="fish3"></div>
+      <div id="header_bar">
+        <p style="font-size: 20px">等待好友进入...</p>
+        <br/>
+        <p style="color: #409eff; font-size: 15px">房间{{ roomId }}</p>
       </div>
-      <p id="vs">VS</p>
-      <div class="user_info">
-        <el-avatar v-if="guestFaceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
-        <el-avatar v-if="guestFaceId!==0" size="100" fit="cover" :src="guestFaceURL"></el-avatar>
-        <p>{{ guestName }}</p>
+      <div id="content">
+        <div id="user">
+          <div class="user_info">
+            <el-avatar v-if="hostFaceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
+            <el-avatar v-if="hostFaceId!==0" size="100" fit="cover" :src="hostFaceURL"></el-avatar>
+            <p>{{ hostName }}</p>
+          </div>
+          <p id="vs">VS</p>
+          <div class="user_info">
+            <el-avatar v-if="guestFaceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
+            <el-avatar v-if="guestFaceId!==0" size="100" fit="cover" :src="guestFaceURL"></el-avatar>
+            <p>{{ guestName }}</p>
+          </div>
+        </div>
+
+        <el-button v-if="roomStatus===0" @click="exit()" style="margin: 20px;">退出房间</el-button>
       </div>
     </div>
-    <el-button v-if="roomStatus===0" @click="exit()">退出房间</el-button>
+
     <copyright></copyright>
   </div>
 </template>
@@ -180,17 +196,133 @@ export default {
 </script>
 
 <style scoped>
-#root {
-  height: 900px;
-  width: 400px;
-  background-color: #37D0B1;
+@import url(https://fonts.googleapis.com/css?family=Sniglet|Raleway:900);
+html,body{
+  overflow: hidden !important;
+}
+::-webkit-scrollbar {
+  width: 0;
+}
+#root  {
+  min-height: 100%;
+  overflow: hidden;
   text-align: center;
 }
+header{
+  height: 160px;
+  background: url('../assets/golf.png') repeat-x bottom;
+}
+h1{
+  font-weight: bold;
+  font-size: 3.6em;
+  font-family: 'Raleway', sans-serif;
+  margin: 0 auto;
+  margin-top: 30px;
+  width: 500px;
+  color: #F90;
+  text-align: center;
+}
+h2{
+  font-weight: 700;
+  font-size: 2em;
+  letter-spacing: 10px;
+  margin: 0 auto;
+  color: #F90;
+  text-align: center;
+}
+/* Animation webkit */
+@-webkit-keyframes myfirst
+{
+  0% {
+    margin-left: -235px;
+    transform: scale(1.2);
+  }
+  90% {
+    margin-left: 100%;
+    transform: scale(1.0);
+  }
+  100% {
+    margin-left: 100%;
+  }
+}
 
-#container {
+/* Animation */
+@keyframes myfirst
+{
+  0% {margin-left: -235px}
+  70% {margin-left: 100%;}
+  100% {margin-left: 100%;}
+}
+
+.fish{
+  background:url("../assets/fish.png");
+  width: 235px;
+  height: 104px;
+  margin-left: -235px;
+  position: absolute;
+  animation: myfirst 12s;
+  -webkit-animation: myfirst 12s;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-timing-function: ease-in-out;
+}
+
+#fish{
+  top: 30%;
+}
+
+#fish2{
+  top: 50%;
+  animation-delay: 3s;
+  -webkit-animation-delay: 3s;
+}
+
+#fish3{
+  top: 80%;
+  animation-delay: 8s;
+  -webkit-animation-delay: 8s;
+}
+
+#header_bar {
+  left: 50%;
+  background: white;
+  top:40%;
+  transform: translate(-50%,-50%);
+  width:450px;
+  position: absolute;
+  transition: all ease-in-out 0.3s;
+  height:max-content;
+  box-shadow:0 5px 20px rgba(0,0,0,0.07);
+  opacity:1;
+  border-radius:20px;
+}
+
+#header_bar p {
+  display: inline;
+  font-size: 1.5em;
+  padding: 20px;
+  line-height: 40px;
+}
+
+#content {
+  left: 50%;
+  background: white;
+  top:70%;
+  transform: translate(-50%,-50%);
+  width:450px;
+  position: absolute;
+  transition: all ease-in-out 0.3s;
+  height:max-content;
+  box-shadow:0 5px 20px rgba(0,0,0,0.07);
+  opacity:1;
+  border-radius:20px;
+}
+#user {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  margin: 20px;
 }
 
 #question {

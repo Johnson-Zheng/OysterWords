@@ -1,10 +1,10 @@
 <template>
-  <div id="container">
+  <div id="root">
     <header>
       <h1>HOME PAGE</h1>
       <h2>首页</h2>
     </header>
-    <div id="root" style="background-color: #98d4f3;height: 400px">
+    <div id="container" style="background-color: #98d4f3;height: 400px">
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
@@ -165,7 +165,7 @@ html,body{
 ::-webkit-scrollbar {
   width: 0;
 }
-#container {
+#root  {
   min-height: 100%;
   overflow: hidden;
   text-align: center;
