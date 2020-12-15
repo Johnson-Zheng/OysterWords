@@ -115,7 +115,6 @@ export default {
                 }
               });
               break;
-
             case 2:
               this.$message.error(res.data.msg);
               break;
@@ -124,8 +123,6 @@ export default {
               this.$message.error("系统异常");
               break;
           }
-
-
         })
     },
     //进入房间提示框（输入房间号）

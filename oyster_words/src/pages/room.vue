@@ -1,39 +1,24 @@
 <template>
   <div id="root">
     <h1>对战房间</h1>
-    <p>{{ header_content }}</p>
+    <p>等待好友进入...</p>
     <p>房间{{ roomId }}</p>
     <div id="container">
       <div class="user_info">
         <el-avatar v-if="hostFaceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
         <el-avatar v-if="hostFaceId!==0" size="100" fit="cover" :src="hostFaceURL"></el-avatar>
         <p>{{ hostName }}</p>
-        <p v-if="roomStatus===1">当前分数：{{ hostCurScore }}</p>
       </div>
       <p id="vs">VS</p>
       <div class="user_info">
         <el-avatar v-if="guestFaceId===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
         <el-avatar v-if="guestFaceId!==0" size="100" fit="cover" :src="guestFaceURL"></el-avatar>
         <p>{{ guestName }}</p>
-        <p v-if="roomStatus===1">当前分数：{{ guestCurScore }}</p>
-      </div>
-    </div>
-    <div v-if="roomStatus===1" id="question">
-      <div id="questionStem">{{ questionStem }}</div>
-      <div id="selectItem">
-        <el-radio v-model="radio1" label="1" border>{{ selectItem[0] }}</el-radio>
-        <el-radio v-model="radio1" label="2" border>{{ selectItem[1] }}</el-radio>
-        <el-radio v-model="radio1" label="3" border>{{ selectItem[2] }}</el-radio>
-        <el-radio v-model="radio1" label="4" border>{{ selectItem[3] }}</el-radio>
       </div>
     </div>
     <el-button v-if="roomStatus===0" @click="exit()">退出房间</el-button>
-    <el-button v-if="roomStatus===1" @click="end()">退出比赛</el-button>
-
-
     <copyright></copyright>
   </div>
-
 </template>
 
 <script>
@@ -49,8 +34,6 @@ export default {
   data() {
     return {
       userIsHost: true,
-      //房间信息
-      header_content: "等待好友进入...",
       roomId: 0,
       loopId: null,
       roomStatus: 0,
@@ -70,15 +53,6 @@ export default {
       guestFaceId: 0,
       guestFaceURL: "",
       guestStatus: 0,
-
-      //题目信息
-      questionStem: "测试题目",
-      selectItem:[
-        "A:示例选项A",
-        "B:示例选项B",
-        "C:示例选项C",
-        "D:示例选项D",
-      ],
     }
   },
   created() {
@@ -138,9 +112,26 @@ export default {
             this.guestName = res.data.data.guestInfo.username;
             this.guestFaceId = res.data.data.guestInfo.faceId;
             this.guestCurScore = res.data.data.guestScore;
-            this.guestFaceURL = "../static/faces/f" + this.hostFaceId + ".jpg";
+            this.guestFaceURL = "../static/faces/f" + this.guestFaceId + ".jpg";
             clearInterval(this.loopId);
-            this.startGame();
+            this.roomStatus = 1;
+            this.$router.push({
+              path:'/battle',
+              params:{
+                roomId:this.roomId,
+                hostInfo:{
+                  hostId:this.hostId,
+                  hostFaceUrl:this.hostFaceUrl,
+                  hostName:this.hostName,
+
+                },
+                guestInfo:{
+                  guestId:this.guestId,
+                  guestFaceUrl:this.guestFaceId,
+                  guestName:this.guestName,
+                }
+              },
+            });
           }
 
         })
@@ -151,17 +142,8 @@ export default {
       this.check();
       //每0.5s向服务器获取guest的数据
       this.loopId = setInterval(this.check, 500);
-
     },
-    //开始游戏
-    startGame() {
-      this.roomStatus = 1;
-      this.$axios.get(URL.getQuestions, {params: {roomId: this.roomId}})
-        .then((res) => {
-          let questionList = res.data.data;
-        })
-    },
-    //退出房间弹窗
+    //HOST出房间弹窗
     exit() {
       this.$confirm('是否要退出当前房间?', '提示', {
         confirmButtonText: '确定',
@@ -176,7 +158,7 @@ export default {
       this.$axios.get(URL.quitRoom, {params: {roomId: this.roomId}})
         .then((res) => {
           let code = res.data.respCode;
-          switch (code) {
+          switch(code) {
             case 1:
               clearInterval(this.loopId);
               this.$message({
@@ -191,31 +173,6 @@ export default {
           }
         })
     },
-    //（游戏中）退出弹窗
-    end() {
-      this.$confirm('游戏还未结束，现在退出会判负，是否退出?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.endBattle();
-      })
-
-    },
-    //（游戏中）退出房间
-    // endBattle(){
-    //   this.$axios.get(URL.quitRoom, {params: {roomId: this.roomId}})
-    //     .then((res) => {
-    //
-    //           this.$message({
-    //             message: res.data.msg,
-    //             type: 'success'
-    //           });
-    //           this.$router.push('/index');
-    //
-    //     })
-    //
-    // },
 
   }
 }
