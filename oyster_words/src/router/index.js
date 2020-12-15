@@ -6,6 +6,8 @@ import self_information from "../pages/self_information";
 import ranking_list from "../pages/ranking_list.vue";
 import room from "../pages/room";
 import battle from "../pages/battle";
+import transfer_room from "../pages/transfer_room";
+import loginToRoom from "../pages/loginToRoom";
 
 Vue.use(Router)
 
@@ -62,6 +64,22 @@ export default new Router({
       component: battle,
       meta: {
         title: '生蚝单词-对战'
+      }
+    },
+    {
+      path: '/transfer_room',
+      name:'生蚝单词-匿名用户访问',
+      component: transfer_room,
+      meta: {
+        title: '生蚝单词-匿名用户访问'
+      }
+    },
+    {
+      path: '/loginToRoom',
+      name:'生蚝单词-用户登录',
+      component: loginToRoom,
+      meta: {
+        title: '生蚝单词-用户登录'
       }
     },
 
