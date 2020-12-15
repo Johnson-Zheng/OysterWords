@@ -33,7 +33,7 @@ export default {
 
   data() {
     return {
-      userIsHost: true,
+      IsUserHost: true,
       roomId: 0,
       loopId: null,
       roomStatus: 0,
@@ -119,6 +119,7 @@ export default {
               path:'/battle',
               params:{
                 roomId:this.roomId,
+                IsUserHost: true,
                 hostInfo:{
                   hostId:this.hostId,
                   hostFaceUrl:this.hostFaceUrl,

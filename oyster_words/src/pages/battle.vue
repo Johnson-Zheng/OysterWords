@@ -37,23 +37,23 @@
           </el-row>
         </div>
         <div style="margin-top: 10px" class="panel_shadow">
-          <h4>{{qid+1}}.选择正确的字母补全单词</h4>
+          <h4>{{qid+1}}/10 选择正确的字母补全单词</h4>
           <div id="qDesc">
             <p id="descEN">{{questionList[qid].desp}}</p>
             <p id="descCN">{{questionList[qid].chinese}}</p>
           </div>
           <el-row>
-            <el-col style="margin-bottom: 10px" span="24">
-              <el-button style="width: 100%" round>{{questionList[qid].choices[0]}}</el-button>
+            <el-col style="margin-bottom: 15px" span="24">
+              <el-button class="button" style="width: 100%" :type="btnStyle.A" round @click="checkAnswer(0)">{{questionList[qid].choices[0]}}</el-button>
             </el-col>
-            <el-col style="margin-bottom: 10px" span="24">
-              <el-button style="width: 100%" round>{{questionList[qid].choices[1]}}</el-button>
+            <el-col style="margin-bottom: 15px" span="24">
+              <el-button class="button" style="width: 100%" :type="btnStyle.B" round @click="checkAnswer(1)">{{questionList[qid].choices[1]}}</el-button>
             </el-col>
-            <el-col style="margin-bottom: 10px" span="24">
-              <el-button style="width: 100%" round>{{questionList[qid].choices[2]}}</el-button>
+            <el-col style="margin-bottom: 15px" span="24">
+              <el-button class="button" style="width: 100%" :type="btnStyle.C" round @click="checkAnswer(2)">{{questionList[qid].choices[2]}}</el-button>
             </el-col>
-            <el-col style="margin-bottom: 10px" span="24">
-              <el-button style="width: 100%" round>{{questionList[qid].choices[3]}}</el-button>
+            <el-col span="24">
+              <el-button class="button" style="width: 100%" :type="btnStyle.D" round @click="checkAnswer(3)">{{questionList[qid].choices[3]}}</el-button>
             </el-col>
           </el-row>
         </div>
@@ -69,7 +69,7 @@
         return{
           roomId:0,
           IsUserHost:false,
-          TimeLeft:20,
+          TimeLeft:100,
           hostInfo:{
             hostId:0,
             hostFaceId:0,
@@ -93,8 +93,18 @@
               choices:['a','b','c','d']
             },
           ],
+          btnStyle:{
+            "A":"",
+            "B":"",
+            "C":"",
+            "D":"",
+          }
         }
       },
+      created() {
+        this.IsUserHost = this.$route.params.IsUserHost
+        this.roomId = this.$route.params.roomId
+        },
       methods:{
         format(TimeLeft) {
           return `${TimeLeft/10}秒`;
@@ -192,16 +202,22 @@
 
   }
   #qDesc{
-    background: #fafafa;
+    background: #f9f9f9;
     border-radius: 10px;
     padding: 10px;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
   #descCN,#descEN{
     color:#639b61;
     font-weight: 700;
     font-family: 'Raleway', sans-serif;
     font-size: 24px;
+  }
+  .button{
+    font-size: 18px;
+    font-weight: bold;
+    font: ;-family: 'Raleway', sans-serif;
+    transition: all ease-in-out 0.3s;
   }
 </style>
