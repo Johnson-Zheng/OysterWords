@@ -4,7 +4,6 @@
     <header>
       <h1>OYSTER</h1>
       <h2>生蚝单词</h2>
-
     </header>
 
     <div id="form" style="background-color: #98d4f3;height: 80vh">
@@ -72,7 +71,7 @@
 
       </div>
     </div>
-    <copyright> </copyright>
+    <copyright></copyright>
   </div>
 </template>
 
@@ -352,7 +351,6 @@
     animation-delay: 8s;
     -webkit-animation-delay: 8s;
   }
-
 
   header{
     height: 160px;

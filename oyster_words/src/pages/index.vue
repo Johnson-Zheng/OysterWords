@@ -1,21 +1,30 @@
 <template>
-  <div id="root">
+  <div id="container">
+    <header>
+      <h1>HOME PAGE</h1>
+      <h2>首页</h2>
+    </header>
+    <div id="root" style="background-color: #98d4f3;height: 400px">
+      <div class="fish" id="fish"></div>
+      <div class="fish" id="fish2"></div>
+      <div class="fish" id="fish3"></div>
+      <div id="header_bar">
+        <el-avatar v-if="faceId===0"  fit="cover" icon="el-icon-user-solid"></el-avatar>
+        <el-avatar v-if="faceId!==0"  fit="cover" :src="faceURL"></el-avatar>
+        <p>{{ username }}</p>
+        <p>挑战胜场：{{ winCnt }}</p>
+      </div>
 
-    <div id="header_bar">
-      <el-avatar v-if="faceId===0"  fit="cover" icon="el-icon-user-solid"></el-avatar>
-      <el-avatar v-if="faceId!==0"  fit="cover" :src="faceURL"></el-avatar>
-      <p>{{ username }}</p>
-      <p>挑战胜场：{{ winCnt }}</p>
+      <div id="content">
+        <el-button class="btn1" @click="createRoom()">创建房间</el-button>
+        <el-button class="btn1" @click="open()">加入房间</el-button>
+        <el-button class="btn1" @click="self()">个人信息</el-button>
+        <el-button class="btn1" @click="rankList()">排行榜</el-button>
+      </div>
+
     </div>
 
-    <div id="content">
-      <el-button class="btn1" @click="createRoom()">创建房间</el-button>
-      <el-button class="btn1" @click="open()">加入房间</el-button>
-      <el-button class="btn1" @click="self()">个人信息</el-button>
-      <el-button class="btn1" @click="rankList()">排行榜</el-button>
-    </div>
-
-    <copyright></copyright>
+    <copyright style="bottom: -2%"></copyright>
 
   </div>
 </template>
@@ -149,18 +158,107 @@ export default {
 </script>
 
 <style scoped>
-#root {
-  height: 700px;
-  width: 400px;
-  background-color: #FFCE7D;
+@import url(https://fonts.googleapis.com/css?family=Sniglet|Raleway:900);
+html,body{
+  overflow: hidden !important;
+}
+::-webkit-scrollbar {
+  width: 0;
+}
+#container {
+  min-height: 100%;
+  overflow: hidden;
+  text-align: center;
+}
+header{
+  height: 160px;
+  background: url('../assets/golf.png') repeat-x bottom;
+}
+h1{
+  font-weight: bold;
+  font-size: 3.6em;
+  font-family: 'Raleway', sans-serif;
+  margin: 0 auto;
+  margin-top: 30px;
+  width: 500px;
+  color: #F90;
+  text-align: center;
+}
+h2{
+  font-weight: 700;
+  font-size: 2em;
+  letter-spacing: 10px;
+  margin: 0 auto;
+  color: #F90;
   text-align: center;
 }
 
+/* Animation webkit */
+@-webkit-keyframes myfirst
+{
+  0% {
+    margin-left: -235px;
+    transform: scale(1.2);
+  }
+  90% {
+    margin-left: 100%;
+    transform: scale(1.0);
+  }
+  100% {
+    margin-left: 100%;
+  }
+}
+
+/* Animation */
+@keyframes myfirst
+{
+  0% {margin-left: -235px}
+  70% {margin-left: 100%;}
+  100% {margin-left: 100%;}
+}
+
+.fish{
+  background:url("../assets/fish.png");
+  width: 235px;
+  height: 104px;
+  margin-left: -235px;
+  position: absolute;
+  animation: myfirst 12s;
+  -webkit-animation: myfirst 12s;
+  animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  -webkit-animation-timing-function: ease-in-out;
+}
+
+#fish{
+  top: 30%;
+}
+
+#fish2{
+  top: 50%;
+  animation-delay: 3s;
+  -webkit-animation-delay: 3s;
+}
+
+#fish3{
+  top: 80%;
+  animation-delay: 8s;
+  -webkit-animation-delay: 8s;
+}
+
 #header_bar {
-  background-color: #E6AA54;
-  height: 100px;
-  width: 350px;
-  margin: 50px 25px;
+  left: 50%;
+  background: white;
+  top:40%;
+  transform: translate(-50%,-50%);
+  width:450px;
+  position: absolute;
+  transition: all ease-in-out 0.3s;
+  height:max-content;
+  box-shadow:0 5px 20px rgba(0,0,0,0.07);
+  opacity:1;
+  border-radius:20px;
 }
 
 #header_bar p {
@@ -171,16 +269,24 @@ export default {
 }
 
 #content {
-  height: 450px;
+  left: 50%;
+  background: white;
+  top:70%;
+  transform: translate(-50%,-50%);
+  width:450px;
+  position: absolute;
+  transition: all ease-in-out 0.3s;
+  height:max-content;
+  box-shadow:0 5px 20px rgba(0,0,0,0.07);
+  opacity:1;
+  border-radius:20px;
 }
 
 .btn1 {
-  height: 100px;
+  height: 60px;
   margin: 20px;
   width: 150px;
+  display: inline-block;
+  border-radius: 20px;
 }
-
-
-
-
 </style>
