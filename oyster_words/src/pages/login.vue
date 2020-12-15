@@ -25,7 +25,8 @@
                   <el-input placeholder="请输入密码" v-model="login_form.password" show-password/>
                 </el-form-item>
                 <el-col :span="24" class="mt-30" style="margin-bottom:10px">
-                  <el-button round type="primary" style="width:100%;" @click="user_login(login_form)" :loading='loginLoading'>登陆</el-button>
+                  <el-button v-if="battleId==0" round type="primary" style="width:100%;" @click="user_login(login_form)" :loading='loginLoading'>登陆</el-button>
+                  <el-button v-if="battleId!=0" round type="primary" style="width:100%;" @click="user_login_ToRoom(login_form)" :loading='loginLoading'>登陆</el-button>
                 </el-col>
               </el-form>
             </el-tab-pane>
@@ -112,6 +113,7 @@
 
     }
     return {
+      battleId:0,  // 为0表示进入首页，不为0则进入对战房间
       loginLoading:false,
       regLoading:false,
       tabSelect:"first",
@@ -146,6 +148,52 @@
     }
   },
   methods:{
+      //登陆进入对战房间
+    user_login_ToRoom(form_name){
+      this.loginLoading = true
+      var _this = this
+      let username = this.login_form.username
+      let password = this.login_form.password
+      if(username && password){
+        this.$axios.post(URL.login, {
+          username: username,
+          password: password
+        }).then((res)=>{
+          let code = res.data.respCode
+          switch (code){
+            case 1:
+              this.$message({
+                duration:2000,
+                showClose:true,
+                message: '登陆成功',
+                type: 'success'
+              });
+              let userdata = res.data.data
+              localStorage.setItem("username",userdata.username)
+              localStorage.setItem("score",userdata.score)
+              localStorage.setItem("faceId",userdata.faceId)
+              localStorage.setItem("userId",userdata.userId)
+              localStorage.setItem("winCnt",userdata.winCnt)
+              this.$router.push('/room')
+              break;
+            case 2:
+              this.$message.error(res.data.msg)
+              this.loginLoading = false
+              break;
+            default:
+              this.$message.error("系统异常")
+              this.loginLoading = false
+              break;
+          }
+
+        })
+      }else if(username==='' || password===''){
+        this.$message({
+          message: '用户名或密码不能为空',
+          type: 'warning'
+        });
+      }
+    },
   //登陆表单提交及验证
     user_login(form_name){
         this.loginLoading = true
