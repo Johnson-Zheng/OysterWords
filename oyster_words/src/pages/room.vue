@@ -123,12 +123,13 @@ export default {
                   hostId:this.hostId,
                   hostFaceUrl:this.hostFaceUrl,
                   hostName:this.hostName,
-
+                  hostFaceID:this.hostFaceId,
                 },
                 guestInfo:{
                   guestId:this.guestId,
                   guestFaceUrl:this.guestFaceId,
                   guestName:this.guestName,
+                  guestFaceId:this.guestFaceId,
                 }
               },
             });

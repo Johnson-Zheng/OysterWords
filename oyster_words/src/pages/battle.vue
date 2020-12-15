@@ -9,8 +9,54 @@
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
-      <div>
-
+      <div id="battle" class="panel_shadow">
+        <el-progress :percentage="TimeLeft" :format="format"></el-progress>
+        <div style="margin-top: 10px" class="panel_shadow">
+          <el-row style="height: 40px">
+            <el-col span="4">
+              <el-avatar v-if="hostInfo.hostFaceId===0" :size="40" fit="cover" icon="el-icon-user-solid"></el-avatar>
+              <el-avatar v-if="hostInfo.hostFaceId!==0" :size="40" fit="cover" :src="hostInfo.hostFaceUrl"></el-avatar>
+            </el-col>
+            <el-col span="5">
+              <el-row>
+                <el-col span="24">{{hostInfo.hostName}}</el-col>
+                <el-col span="24">得分：{{hostInfo.hostScore}}</el-col>
+              </el-row>
+            </el-col>
+            <el-col span="6">PK</el-col>
+            <el-col span="5">
+              <el-row>
+                <el-col span="24">{{guestInfo.guestName}}</el-col>
+                <el-col span="24">得分：{{guestInfo.guestScore}}</el-col>
+              </el-row>
+            </el-col>
+            <el-col span="4">
+              <el-avatar v-if="guestInfo.guestFaceId===0" :size="40" fit="cover" icon="el-icon-user-solid"></el-avatar>
+              <el-avatar v-if="guestInfo.guestFaceId!==0" :size="40" fit="cover" :src="guestInfo.guestFaceUrl"></el-avatar>
+            </el-col>
+          </el-row>
+        </div>
+        <div style="margin-top: 10px" class="panel_shadow">
+          <h4>{{qid+1}}.选择正确的字母补全单词</h4>
+          <div id="qDesc">
+            <p id="descEN">{{questionList[qid].desp}}</p>
+            <p id="descCN">{{questionList[qid].chinese}}</p>
+          </div>
+          <el-row>
+            <el-col style="margin-bottom: 10px" span="24">
+              <el-button style="width: 100%" round>{{questionList[qid].choices[0]}}</el-button>
+            </el-col>
+            <el-col style="margin-bottom: 10px" span="24">
+              <el-button style="width: 100%" round>{{questionList[qid].choices[1]}}</el-button>
+            </el-col>
+            <el-col style="margin-bottom: 10px" span="24">
+              <el-button style="width: 100%" round>{{questionList[qid].choices[2]}}</el-button>
+            </el-col>
+            <el-col style="margin-bottom: 10px" span="24">
+              <el-button style="width: 100%" round>{{questionList[qid].choices[3]}}</el-button>
+            </el-col>
+          </el-row>
+        </div>
       </div>
     </div>
   </div>
@@ -18,11 +64,47 @@
 
 <script>
     export default {
-        name: "battle"
+      name: "battle",
+      data(){
+        return{
+          roomId:0,
+          IsUserHost:false,
+          TimeLeft:20,
+          hostInfo:{
+            hostId:0,
+            hostFaceId:0,
+            hostFaceUrl:"../static/faces/f1.jpg",
+            hostName:"Host",
+            hostScore:0,
+          },
+          guestInfo:{
+            guestId:0,
+            guestFaceId:0,
+            guestFaceUrl:"../static/faces/f1.jpg",
+            guestName:"Guest",
+            guestScore:0,
+          },
+          qid:0,
+          questionList:[
+            {
+              desp:"Y_llow",
+              chinese:"黄色",
+              answer:"A",
+              choices:['a','b','c','d']
+            },
+          ],
+        }
+      },
+      methods:{
+        format(TimeLeft) {
+          return `${TimeLeft/10}秒`;
+        }
+      }
     }
 </script>
 
 <style scoped>
+  @import url("https://fonts.googleapis.com/css?family=Sniglet|Raleway:900");
   h1{
     font-weight: bold;
     font-size: 3.6em;
@@ -41,7 +123,9 @@
     color: #F90;
     text-align: center;
   }
-
+  h4{
+    margin: 0 0 10px 0;
+  }
   /* Animation webkit */
   @-webkit-keyframes myfirst
   {
@@ -96,9 +180,28 @@
     -webkit-animation-delay: 8s;
   }
 
-
   header{
-    height: 160px;
+    height: 140px;
     background: url('../assets/golf.png') repeat-x bottom;
+  }
+  #battle{
+    background: white;
+    width: 400px;
+    margin-left:50%;
+    transform: translateX(-50%);
+
+  }
+  #qDesc{
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  #descCN,#descEN{
+    color:#639b61;
+    font-weight: 700;
+    font-family: 'Raleway', sans-serif;
+    font-size: 24px;
   }
 </style>

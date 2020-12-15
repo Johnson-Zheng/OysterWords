@@ -36,8 +36,8 @@
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible_1 = false" round>取 消</el-button>
-              <el-button type="primary" @click="changePSW()" round>确 定</el-button>
+        <el-button @click="dialogVisible_1 = false" round>取 消</el-button>
+        <el-button type="primary" @click="changePSW()" round>确 定</el-button>
       </span>
     </el-dialog>
 
@@ -248,6 +248,7 @@
   }
 </script>
 <style scoped>
+  @import url("https://fonts.googleapis.com/css?family=Sniglet|Raleway:900");
   #background >>> .el-dialog{
     border-radius: 20px;
     transition: all ease-in-out 0.3s;
