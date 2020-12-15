@@ -4,8 +4,9 @@
     <header>
       <h1>OYSTER</h1>
       <h2>接受邀请</h2>
-      <h3>房间号{{battleId}}</h3>
+      <h3></h3>
     </header>
+
 
     <div id="form" style="background-color: #98d4f3;height: 80vh">
       <div class="fish" id="fish"></div>
@@ -14,10 +15,13 @@
       <div id="panel" class="panel_shadow">
         <div id="login-panel">
           <el-tabs v-model="transfer" align="center">
+            <el-col style="margin-bottom: 20px">
+              <h4 style="color: #409EFF">房间号：{{battleId}}</h4>
+            </el-col>
             <el-row :gutter="20">
 <!--              登录-->
               <el-col :span="10" class="mt-30" style="margin-bottom:10px;margin-left: 10px" >
-                <el-button round type="primary" style="width:100%;" @click="goToLoginToRoom" :loading='loginLoading'>登陆</el-button>
+                <el-button round type="primary" style="width:100%;" @click="goToLogin" :loading='loginLoading'>登陆/注册</el-button>
               </el-col>
 <!--              匿名访问-->
               <el-col :span="10" class="mt-30" style="margin-bottom:10px;margin-left: 40px">
@@ -35,7 +39,7 @@
 
 <script>
   import Copyright from "../components/footer/copyright";
-  import * as URL from "../global/interfaceURL"
+  import * as URL from "../global/interfaceURL";
   export default {
     name: "login",
     components: {Copyright},
@@ -71,6 +75,7 @@
       }
       return {
         battleId:0,
+        id:0,
         loginLoading:false,
         regLoading:false,
         tabSelect:"first",
@@ -108,12 +113,17 @@
       this.battleId = this.$route.query.battleId
       },
     methods:{
-      //GotoRoom
       goToRoom(){
+        this.$axios.get(URL.getAnonymousId).then((res)=>{
+          this.id=res.data.userId
+        })
+        this.$axios.get("/battle/step_in?id="+id+"&battleId="+this.battleId)
         this.$router.push('/room')
       },
-      goToLoginToRoom(){
-        this.$router.push('/loginToRoom')
+      goToLogin(){
+        this.id=localStorage.getItem("userId");
+        this.$axios.get("/battle/step_in?id="+id+"&battleId="+this.battleId);
+        this.$router.push('/loginToRoom');
       },
     }
   };

@@ -22,3 +22,5 @@ export const changeUsername = url+"changeUsername";
 export const changeFace = url+"changeFace";
 //根据房间获取题目
 export const getQuestions = url+"getQuestions";
+//获取一个匿名用户id
+export const getAnonymousId = url+"getAnonymousId";
