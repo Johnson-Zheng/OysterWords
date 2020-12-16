@@ -27,8 +27,8 @@ export default {
     height:max-content;
     box-shadow:0 5px 20px rgba(0,0,0,0.07);
     opacity:1;
-    border-radius:30px;
-    padding:20px 30px 30px 35px;
+    border-radius:20px;
+    padding:20px;
   }
   .forget{
     font-size:14px;

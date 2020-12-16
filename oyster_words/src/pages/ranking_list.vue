@@ -4,9 +4,8 @@
     <header>
       <h1>Rank</h1>
       <h2>排行榜</h2>
-
     </header>
-    <div id="form" style="background-color: #98d4f3;height: 700px;width: 100vw">
+    <div id="form" style="background-color: #98d4f3;height: 90vh;width: 100vw">
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
@@ -27,7 +26,7 @@
               </tr>
             </table>
           </div>
-          <table style="margin-top: 10px;margin-left: -30px">
+          <table style="margin-top: 10px;margin-left: -30px;margin-bottom:10px">
             <thead>
               <tr>
                 <td id="td2_1">排名</td>
@@ -57,10 +56,13 @@
               </tr>
             </tbody>
           </table>
+          <copyright style="color: #AAAAAA;width:100%"></copyright>
+
         </div>
+
       </div>
     </div>
-    <copyright style="bottom: -56%"></copyright>
+
   </div>
 </template>
 
@@ -140,10 +142,10 @@
     color:#aaaaaa
   }
   #my_score{
+    width: auto;
     background: white;
     padding: 10px;
     height: max-content;
-
     border-radius: 20px;
     margin-top: 20px;
   }
@@ -152,6 +154,7 @@
     height: 40px;
   }
   #td1_1{
+    font-weight: bold;
     text-align: center;
     line-height: 20px;
     height: 40px;
@@ -167,15 +170,18 @@
   #td1_3{
     line-height: 20px;
     height: 40px;
+    font-family: 'Raleway', sans-serif;
     width:100px;
   }
   #td1_4{
+    font-weight: bold;
     line-height: 20px;
     height: 40px;
     width: 100px;
     color: #F90;
   }
   #td1_5{
+    font-weight: bold;
     text-align: center;
     line-height: 20px;
     height: 40px;
@@ -185,10 +191,10 @@
   #list{
     position: absolute;
     left: 50%;
-    top:30%;
+    top:25%;
     transform: translate(-50%);
     padding: 20px;
-    width: 450px;
+    width: 410px;
     height: max-content;
     border-radius: 20px;
     background: white;
@@ -208,10 +214,19 @@
   #td2_3,#td3_3{
     width: 230px;
     text-align: left;
+    font-family: 'Raleway', sans-serif;
   }
   #td2_4,#td3_4{
     width: 50px;
     text-align: center;
+    font-family: 'Raleway', sans-serif;
+  }
+  #td3_4{
+    color: #F90;
+    font-size: 18px;
+  }
+  #td3_4 p{
+    margin: 0;
   }
   #td3_1 >>> .el-avatar{
     user-select: none;

@@ -5,7 +5,7 @@
       <h2>对战房间</h2>
     </header>
 
-    <div id="container" style="background-color: #98d4f3;height: 400px">
+    <div id="container" style="background-color: #98d4f3;height: 80vh">
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
@@ -57,7 +57,7 @@ export default {
       //房主信息
       hostId: 0,
       hostName: "",
-      hostCurScore: 0,
+      hostScore: 0,
       hostFaceId: 0,
       hostFaceURL: "",
       hostStatus: 0,
@@ -65,14 +65,13 @@ export default {
       //加入者信息
       guestId: 0,
       guestName: "等待用户加入...",
-      guestCurScore: 0,
+      guestScore: 0,
       guestFaceId: 0,
       guestFaceURL: "",
       guestStatus: 0,
     }
   },
   created() {
-    this.userIsHost = this.$route.params.userIsHost;
     this.roomId = this.$route.query.roomId;
     this.dataInit();
   },
@@ -89,14 +88,14 @@ export default {
           this.hostId = res.data.data.hostId;
           this.hostName = res.data.data.hostInfo.username;
           this.hostFaceId = res.data.data.hostInfo.faceId;
-          this.hostCurScore = res.data.data.hostScore;
+          this.hostScore = res.data.data.hostScore;
           this.hostFaceURL = "../static/faces/f" + this.hostFaceId + ".jpg";
           //初始化guest的信息
           this.guestStatus = res.data.data.guestStatus;
           this.guestId = res.data.data.guestId;
           this.guestName = res.data.data.guestInfo.username;
           this.guestFaceId = res.data.data.guestInfo.faceId;
-          this.guestCurScore = res.data.data.guestScore;
+          this.guestScore = res.data.data.guestScore;
           this.guestFaceURL = "../static/faces/f" + this.guestFaceId + ".jpg";
         })
     },
@@ -110,7 +109,7 @@ export default {
             this.hostId = res.data.data.hostId;
             this.hostName = res.data.data.hostInfo.username;
             this.hostFaceId = res.data.data.hostInfo.faceId;
-            this.hostCurScore = res.data.data.hostScore;
+            this.hostScore = res.data.data.hostScore;
             this.hostFaceURL = "../static/faces/f" + this.hostFaceId + ".jpg";
           }
           //若host和guest都在房间则开始游戏
@@ -120,34 +119,32 @@ export default {
             this.hostId = res.data.data.hostId;
             this.hostName = res.data.data.hostInfo.username;
             this.hostFaceId = res.data.data.hostInfo.faceId;
-            this.hostCurScore = res.data.data.hostScore;
+            this.hostScore = res.data.data.hostScore;
             this.hostFaceURL = "../static/faces/f" + this.hostFaceId + ".jpg";
             //渲染guest的信息
             this.guestStatus = res.data.data.guestStatus;
             this.guestId = res.data.data.guestId;
             this.guestName = res.data.data.guestInfo.username;
             this.guestFaceId = res.data.data.guestInfo.faceId;
-            this.guestCurScore = res.data.data.guestScore;
+            this.guestScore = res.data.data.guestScore;
             this.guestFaceURL = "../static/faces/f" + this.guestFaceId + ".jpg";
             clearInterval(this.loopId);
             this.roomStatus = 1;
             this.$router.push({
               path:'/battle',
-              params:{
+              name:'生蚝单词-对战',
+              query:{
                 roomId:this.roomId,
-                IsUserHost: true,
-                hostInfo:{
-                  hostId:this.hostId,
-                  hostFaceUrl:this.hostFaceUrl,
-                  hostName:this.hostName,
-                  hostFaceID:this.hostFaceId,
-                },
-                guestInfo:{
-                  guestId:this.guestId,
-                  guestFaceUrl:this.guestFaceId,
-                  guestName:this.guestName,
-                  guestFaceId:this.guestFaceId,
-                }
+              },
+              params:{
+                hostId:this.hostId,
+                hostFaceUrl:this.hostFaceURL,
+                hostName:this.hostName,
+                hostFaceID:this.hostFaceId,
+                guestId:this.guestId,
+                guestFaceUrl:this.guestFaceURL,
+                guestName:this.guestName,
+                guestFaceId:this.guestFaceId,
               },
             });
           }

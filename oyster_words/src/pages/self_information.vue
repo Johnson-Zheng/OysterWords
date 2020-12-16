@@ -64,13 +64,13 @@
               <el-button type="primary" @click="changeUserface()">确 定</el-button>
       </span>
     </el-dialog>
+
     <header>
       <h1>MY INFO</h1>
       <h2>个人信息</h2>
-
     </header>
 
-    <div id="form" style="background-color: #98d4f3;height: 80vh">
+    <div id="form" style="background-color: #98d4f3;height: 85vh">
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
@@ -108,7 +108,7 @@
          </div>
       </div>
      </div>
-    <copyright/>
+    <copyright></copyright>
   </div>
 </template>
 
@@ -265,7 +265,7 @@
     left: 50%;
     top:50%;
     transform: translate(-50%,-50%);
-    width:350px;
+    width:300px;
     height: max-content;
     position: absolute;
     transition: all ease-in-out 0.3s;

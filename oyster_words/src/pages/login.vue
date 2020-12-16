@@ -49,8 +49,6 @@
                       <el-input-number size="small" v-model="register_form.faceid" controls-position="right"  @change="selectFace(register_form.faceid)" :min="0" :max="20"></el-input-number>
                     </el-col>
                   </el-row>
-
-
                 </el-form-item>
                 <el-form-item label="用户名" prop="username" >
                   <el-input v-model="register_form.username" placeholder="请输入用户名"/>
@@ -61,7 +59,6 @@
                 <el-form-item label="重复密码" prop="password2">
                   <el-input placeholder="请再次输入密码" v-model="register_form.password2" show-password/>
                 </el-form-item>
-
                 <el-col :span="24">
                   <el-button type="primary" style="width:100%;" :loading='regLoading' @click="register(register_form)">注册</el-button>
                 </el-col>
@@ -69,7 +66,6 @@
             </el-tab-pane>
           </el-tabs>
         </div>
-
       </div>
     </div>
     <copyright></copyright>
@@ -312,7 +308,7 @@
   #panel{
     left: 50%;
     background: white;
-    top:55%;
+    top:50%;
     transform: translate(-50%,-50%);
     width:350px;
     position: absolute;
@@ -401,7 +397,7 @@
   }
 
   header{
-    height: 160px;
+    height: 140px;
     background: url('../assets/golf.png') repeat-x bottom;
   }
 

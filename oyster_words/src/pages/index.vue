@@ -4,7 +4,7 @@
       <h1>HOME PAGE</h1>
       <h2>首页</h2>
     </header>
-    <div id="container" style="background-color: #98d4f3;height: 400px">
+    <div id="container" style="background-color: #98d4f3;height: 80vh">
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
@@ -116,12 +116,12 @@ export default {
               });
               this.$router.push({
                 path:'/room',
+                query:{
+                  roomId: roomId,
+                },
                 params:{
                   userIsHost:false,
                 },
-                query: {
-                  roomId: roomId,
-                }
               });
               break;
             case 2:
