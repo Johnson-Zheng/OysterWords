@@ -3,7 +3,7 @@
     <div id="gameover" v-if="gameOver">
       <div id="panel" class="panel_shadow">
         <p class="endTitle">GAME OVER</p>
-        <p class="endTitle">对局结束</p>
+        <p class="endTitle">{{overDesp}}</p>
         <div style="margin-top: 10px" class="panel_shadow userInfo">
           <el-row style="height: 40px">
             <el-col span="9">
@@ -58,12 +58,12 @@
       <h1>Battle</h1>
       <h2>对战房间</h2>
     </header>
-    <div id="form" style="background-color: #98d4f3;height: 82vh;width: 100vw">
+    <div id="form" style="background-color: #98d4f3;height: calc(100vh - 140px);width: 100vw">
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
       <div id="battle" class="panel_shadow">
-        <el-page-header @back="back()" :content="title"></el-page-header>
+        <el-page-header @back="goBack()" :content="title"></el-page-header>
         <div id="userInfo" style="margin-top: 10px" class="panel_shadow">
           <el-row style="height: 40px">
             <el-col id="hostFace" span="4">
@@ -95,6 +95,15 @@
                 <el-avatar v-if="guestInfo.guestFaceId===0" :size="40" fit="cover" icon="el-icon-user-solid"></el-avatar>
                 <el-avatar v-if="guestInfo.guestFaceId!==0" :size="40" fit="cover" :src="guestInfo.guestFaceUrl"></el-avatar>
               </el-badge>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col span="9">
+              <el-progress style="width: 120%" :percentage="hostQid*10" :format="processFormat" :color="hostProcessType"></el-progress>
+            </el-col>
+
+            <el-col span="9" :offset="6">
+              <el-progress style="width: 120%" :percentage="guestQid*10" :format="processFormat" :color="guestProcessType"></el-progress>
             </el-col>
           </el-row>
         </div>
@@ -150,18 +159,23 @@
         winner:0,
         IsUserHost:false,
         TimeLeft:100,
-
+        overDesp:'',
         loopTimeId:0,
         loopScoreId:0,
         roomStatus:0,
         gameOver:false,
+
         hostTag:"我",
         hostTagType:'primary',
         hostScoreType:'',
+        hostProcessType:'#409eff',
+        hostQid:0,
 
         guestTag:'对方',
         guestTagType:'',
         guestScoreType:'danger',
+        guestProcessType:'#f56c6c',
+        guestQid:0,
 
         hostInfo:{
           hostId:0,
@@ -274,9 +288,9 @@
     },
     methods:{
       initData(){
-        if(this.roomId===0){
+        if(this.hostInfo.hostId===undefined || this.hostInfo.hostId=== null || this.hostInfo.hostId===''){
           this.$message.error("房间数据错误")
-          this.$router.go(-1)
+          this.$router.push('/index')
         }else{
           let userId = localStorage.getItem('userId')
           this.IsUserHost = (userId == this.hostInfo.hostId)
@@ -286,18 +300,36 @@
             this.hostTag = "对方"
             this.hostTagType = ""
             this.hostScoreType='danger'
+            this.hostProcessType = '#f56c6c'
             this.guestTag = "我"
             this.guestTagType = "primary"
             this.guestScoreType = ""
+            this.guestProcessType = '#409eff'
+
           }
         }
       },
       getScore(){
         this.$axios.get(URL.refreshBattle, {params: {id: this.roomId}})
           .then((res) =>{
+            let roomStatus = res.data.roomStatus;
+            if(roomStatus === -1){
+              this.$message.error("房间状态异常")
+              this.TimeLeft = 0
+              clearInterval(this.loopTimeId)
+              clearInterval(this.loopScoreId)
+              this.router.push('/index')
+              return null
+            }else if(roomStatus === -3){
+              this.$message.warning("游戏已结束")
+              this.endGame()
+              return null
+            }
 
             this.hostInfo.hostScore = res.data.creatorCredits;
             this.guestInfo.guestScore = res.data.guestCredits;
+            this.hostQid = res.data.creatorQuestionIndex;
+            this.guestQid = res.data.guestQuestionIndex;
 
           })
       },
@@ -313,6 +345,14 @@
             this.sleep(1000).then(() => {
               if(this.qid<9){
                 this.qid+=1
+                let uid = localStorage.getItem('userId')
+                let score = 0
+                if(this.IsUserHost){
+                  score = this.hostInfo.hostScore
+                }else{
+                  score = this.guestInfo.guestScore
+                }
+                this.updateScore(uid,score)
                 this.TimeLeft = 100
                 this.btnStyle = ['','','','']
               }else{
@@ -338,6 +378,9 @@
       format(TimeLeft) {
         return `${TimeLeft/10}秒`;
       },
+      processFormat(qid){
+        return `${qid/10}/10`;
+      },
       checkAnswer(chose){
         let answer = this.questionList[this.qid].answer
         clearInterval(this.loopTimeId)
@@ -355,10 +398,9 @@
             score = this.guestInfo.guestScore
             score += newscore
           }
-          this.$message.success("得分："+newscore)
           this.updateScore(uid,score)
 
-          this.sleep(1000).then(() => {
+          this.sleep(500).then(() => {
             if(this.qid<9){
               this.qid+=1
             }else{
@@ -371,10 +413,18 @@
             this.loopCountDown()
           })
         }else{
-          this.$message.error("正确答案："+answer+" 您的答案"+chose)
           this.btnStyle[chose] = "danger"
           this.btnStyle[answer] = "success"
-          this.sleep(1000).then(() => {
+          let uid = localStorage.getItem('userId')
+          let score = 0
+          if(this.IsUserHost){
+            score = this.hostInfo.hostScore
+          }else{
+            score = this.guestInfo.guestScore
+          }
+          this.updateScore(uid,score)
+
+          this.sleep(500).then(() => {
             if(this.qid<9){
               this.qid+=1
             }else{
@@ -396,24 +446,66 @@
             }
           })
       },
+      updateGame(){
+        let uid = localStorage.getItem('userId')
+        this.$axios.get(`${URL.saveScore}?id=${uid}&battleId=${this.roomId}`)
+          .then((res) => {
+            if(res.data.respCode ===1){
+              // this.$message.success('提交成功')
+          }
+        })
+      },
       sleep(time){
         return new Promise((resolve) => setTimeout(resolve, time));
       },
       endGame(){
+        this.updateGame()
+        this.$axios.get(URL.refreshBattle, {params: {id: this.roomId}})
+          .then((res) =>{
+            this.hostInfo.hostScore = res.data.creatorCredits;
+            this.guestInfo.guestScore = res.data.guestCredits;
+          })
         this.gameOver = true
         this.TimeLeft = 0
         clearInterval(this.loopTimeId)
         clearInterval(this.loopScoreId)
         if(this.hostInfo.hostScore === this.guestInfo.guestScore){
           this.winner = 0
+          this.overDesp = '游戏结束'
         }else if(this.hostInfo.hostScore > this.guestInfo.guestScore){
           this.winner = 1
+          if(this.IsUserHost){
+            this.overDesp = '您获胜了！'
+          }else{
+            this.overDesp = '您失败了，再接再厉'
+          }
         }else{
           this.winner = 2
+          if(this.IsUserHost){
+            this.overDesp = '您失败了，再接再厉'
+          }else{
+            this.overDesp = '您获胜了！'
+          }
         }
       },
       goHome(){
         this.$router.push('/index')
+      },
+      goBack(){
+        this.$confirm('游戏中离开会将无法再次进入，是否继续？', '警告', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'warning',
+            message: '您已离开房间，本场游戏失败'
+          });
+          this.$router.push('/index')
+
+        }).catch(() => {
+
+        });
       }
     }
   }
@@ -511,7 +603,7 @@
     width: 400px;
     margin-left:50%;
     transform: translateX(-50%);
-
+    top:22%;
   }
   #qDesc{
     background: #f9f9f9;

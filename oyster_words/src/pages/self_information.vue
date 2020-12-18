@@ -70,18 +70,16 @@
       <h2>个人信息</h2>
     </header>
 
-    <div id="form" style="background-color: #98d4f3;height: 85vh">
+    <div id="form" style="background-color: #98d4f3;height: calc(100vh - 190px);">
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
       <div id="panel_selfInform" class="panel_shadow" align="center">
         <el-page-header @back="back()"></el-page-header>
-
         <div id="img" @click="dialogVisible_2= true">
           <el-avatar v-if="faceId===0" :size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
           <el-avatar v-if="faceId!==0" :size="100" fit="cover" :src="faceURL"></el-avatar>
         </div>
-
         <div>
           <el-row>
             <el-col span="24">
@@ -100,14 +98,13 @@
             <el-col span="12">
               <el-button style="width: 100%" @click="dialogVisible_1= true" size="large" round>修改密码</el-button>
             </el-col>
-
           </el-row>
           <el-col style="margin-top:20px" span="24">
             <el-button style="width: 100%" @click="goToLogin" size="large" type="danger" round>注销</el-button>
           </el-col>
          </div>
       </div>
-     </div>
+    </div>
     <copyright></copyright>
   </div>
 </template>
@@ -150,7 +147,6 @@
         this.faceId=localStorage.getItem("faceId")
         this.faceURL="../static/faces/f"+this.faceId+".jpg"
       },
-        //修改密码
       changePSW(){
         let password=this.oldPSW  //获取input输入的旧密码
         let newPassword=this.newPSW//获取input输入的新密码
@@ -158,23 +154,22 @@
           username:this.username,
           password: password,
           newPassword:newPassword
-        }).then((res)=>{
-          if(newPassword!==password){
-            this.$message({
-              duration:2000,
-              showClose:true,
-              message: '修改成功',
-              type: 'success'
-            });
-            this.dialogVisible_1 = false;
-          }
-          else{
-            this.$message.error("修改失败")
-            this.loginLoading = false
-          }
-        })
+          }).then((res)=>{
+            if(newPassword!==password){
+              this.$message({
+                duration:2000,
+                showClose:true,
+                message: '修改成功',
+                type: 'success'
+              });
+              this.dialogVisible_1 = false;
+            }
+            else{
+              this.$message.error("修改失败")
+              this.loginLoading = false
+            }
+          })
         },
-          //修改用户昵称
         changeUserName() {
           let username = this.username
           this.$axios.get( URL.changeUsername+"?userId="+this.userId+"&username="+this.newname).then((res)=>{

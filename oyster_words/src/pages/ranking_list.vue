@@ -1,11 +1,10 @@
 <template>
-
   <div align="center">
     <header>
       <h1>Rank</h1>
       <h2>排行榜</h2>
     </header>
-    <div id="form" style="background-color: #98d4f3;height: 90vh;width: 100vw">
+    <div id="form" style="background-color: #98d4f3;height: calc(100vh - 190px);width: 100vw">
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
@@ -39,13 +38,11 @@
               <tr v-for="(item,index) in rankData">
                 <td id="td3_1">
                   <el-image style="height: 30px;width: 30px;" v-if="index >= 0 && index <= 2" fit="cover" :src=get_rankImageURL(index)></el-image>
-    <!--              背景颜色、大小-->
                   <el-avatar  size="small" v-if="index >= 3">{{index+1}}</el-avatar>
                 </td>
                 <td id="td3_2">
                   <el-avatar v-if="item.faceId===0" :size="40" fit="cover" icon="el-icon-user-solid"></el-avatar>
                   <el-avatar v-if="item.faceId!==0" :size="40" fit="cover" :src="faceList[index]"></el-avatar>
-
                 </td>
                 <td id="td3_3">
                   <p class="username">{{item.username}}</p>
@@ -57,12 +54,9 @@
             </tbody>
           </table>
           <copyright style="color: #AAAAAA;width:100%"></copyright>
-
         </div>
-
       </div>
     </div>
-
   </div>
 </template>
 
@@ -90,7 +84,6 @@
     created() {
       this.get_UserInfor()
       this.get_Rank()
-
     },
     mounted() {
     },
@@ -191,7 +184,7 @@
   #list{
     position: absolute;
     left: 50%;
-    top:25%;
+    top:21%;
     transform: translate(-50%);
     padding: 20px;
     width: 410px;
@@ -268,15 +261,12 @@
       margin-left: 100%;
     }
   }
-
-  /* Animation */
   @keyframes myfirst
   {
     0% {margin-left: -235px}
     70% {margin-left: 100%;}
     100% {margin-left: 100%;}
   }
-
   .fish{
     background:url("../assets/fish.png");
     width: 235px;
@@ -290,7 +280,6 @@
     animation-timing-function: ease-in-out;
     -webkit-animation-timing-function: ease-in-out;
   }
-
   #fish{
     top: 30%;
   }
@@ -300,14 +289,11 @@
     animation-delay: 3s;
     -webkit-animation-delay: 3s;
   }
-
   #fish3{
     top: 80%;
     animation-delay: 8s;
     -webkit-animation-delay: 8s;
   }
-
-
   header{
     height: 160px;
     background: url('../assets/golf.png') repeat-x bottom;

@@ -6,7 +6,7 @@
       <h2>生蚝单词</h2>
     </header>
 
-    <div id="form" style="background-color: #98d4f3;height: 80vh">
+    <div id="form" style="background-color: #98d4f3;height: calc(100vh - 190px)">
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
@@ -41,7 +41,7 @@
                       <el-avatar v-if="register_form.faceid===0" size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
                       <el-avatar v-if="register_form.faceid!==0" size="100" fit="cover" :src="faceURL"></el-avatar>
                     </el-col>
-                    <el-col   :span="5">
+                    <el-col :span="5">
                       <p v-if="register_form.faceid===0" style="height: 100%;margin: 0" >默认头像</p>
                       <p v-if="register_form.faceid!==0" style="height: 100%;margin: 0">头像{{register_form.faceid}}</p>
                     </el-col>
@@ -397,7 +397,7 @@
   }
 
   header{
-    height: 140px;
+    height: 160px;
     background: url('../assets/golf.png') repeat-x bottom;
   }
 

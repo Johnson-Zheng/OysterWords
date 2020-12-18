@@ -4,7 +4,7 @@
       <h1>HOME PAGE</h1>
       <h2>首页</h2>
     </header>
-    <div id="container" style="background-color: #98d4f3;height: 80vh">
+    <div id="container" style="background-color: #98d4f3;height: calc(100vh - 190px)">
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
@@ -24,7 +24,7 @@
 
     </div>
 
-    <copyright style="bottom: -2%"></copyright>
+    <copyright></copyright>
 
   </div>
 </template>

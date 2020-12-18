@@ -24,7 +24,10 @@ export const changeFace = url+"changeFace";
 export const getQuestions = url+"getQuestions";
 //获取一个匿名用户id
 export const getAnonymousId = url+"getAnonymousId";
-//提交房间成绩
+//提交单题成绩
 export const credit = url+"battle/update/credit";
 //获取房间对战信息
 export const refreshBattle = url+"battle/refresh";
+//提交对战成绩
+export const saveScore = url+"battle/saveScore";
+
