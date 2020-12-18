@@ -30,4 +30,3 @@ export const credit = url+"battle/update/credit";
 export const refreshBattle = url+"battle/refresh";
 //提交对战成绩
 export const saveScore = url+"battle/saveScore";
-

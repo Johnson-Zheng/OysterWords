@@ -108,12 +108,13 @@
           </el-row>
         </div>
         <div style="margin-top: 10px" class="panel_shadow">
-          <h4>{{qid+1}}/10 选择正确的字母补全单词</h4>
+          <h4 v-if="questionList[qid].action==='fill'">{{qid+1}}/10 选择正确的字母以补全单词</h4>
+          <h4 v-if="questionList[qid].action==='tr'">{{qid+1}}/10 英汉互译</h4>
           <el-progress style="width: 100%;margin-bottom: 10px;margin-top: 5px" :stroke-width="20" :text-inside="true" :percentage="TimeLeft" :format="format" :color="customColors"></el-progress>
 
           <div id="qDesc">
             <p id="descEN">{{questionList[qid].desp}}</p>
-            <p id="descCN">{{questionList[qid].chinese}}</p>
+            <p id="descCN" v-if="questionList[qid].action==='fill'">{{questionList[qid].chinese}}</p>
           </div>
           <el-row>
             <el-col style="margin-bottom: 15px" span="24">
@@ -294,6 +295,7 @@
         }else{
           let userId = localStorage.getItem('userId')
           this.IsUserHost = (userId == this.hostInfo.hostId)
+          this.getQuesiton()
           //判断身份
           if(this.IsUserHost){
           }else{
@@ -305,9 +307,15 @@
             this.guestTagType = "primary"
             this.guestScoreType = ""
             this.guestProcessType = '#409eff'
-
           }
         }
+
+      },
+      getQuesiton(){
+        this.$axios.get(URL.getQuestions, {params: {roomId: this.roomId}})
+          .then((res) =>{
+            this.questionList = res.data.data
+          })
       },
       getScore(){
         this.$axios.get(URL.refreshBattle, {params: {id: this.roomId}})
