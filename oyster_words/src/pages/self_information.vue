@@ -20,7 +20,7 @@
     <el-dialog
       title="修改密码"
       :visible.sync="dialogVisible_1 "
-      width="30%"
+      width="400px"
       :before-close="handleClose">
       <el-row style="margin-bottom: 20px">
         <el-col span="4" :offset="3">旧密码:</el-col>
@@ -44,7 +44,7 @@
     <el-dialog
       title="修改头像"
       :visible.sync="dialogVisible_2"
-      width="30%"
+      width="400px"
       :before-close="handleClose">
       <el-row type="flex" justify="space-between">
         <el-col  :span="3">

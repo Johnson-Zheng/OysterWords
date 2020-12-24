@@ -8,30 +8,63 @@
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
-      <div id="header_bar">
-        <el-avatar v-if="faceId===0"  fit="cover" icon="el-icon-user-solid"></el-avatar>
-        <el-avatar v-if="faceId!==0"  fit="cover" :src="faceURL"></el-avatar>
-        <p>{{ username }}</p>
-        <p>挑战胜场：{{ winCnt }}</p>
-      </div>
+      <div id="panel_selfInform" class="panel_shadow" align="center">
+        <el-tag style="border-radius: 50px;position: absolute" type="warning">UID：{{userId}}</el-tag>
+        <div id="img">
+          <el-avatar v-if="faceId===0" :size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
+          <el-avatar v-if="faceId!==0" :size="100" fit="cover" :src="faceURL"></el-avatar>
+        </div>
+        <div>
+          <el-row>
+            <h3>{{username}}</h3>
+          </el-row>
+          <el-row style="margin-top: 30px">
+            <el-col span="12">
+              <el-row>
+                <el-col>
+                  <el-badge value="总分" class="item" type="warning">
+                    <div class="win" >{{score}}</div>
+                  </el-badge>
+                </el-col>
 
-      <div id="content">
-        <el-button class="btn1" @click="createRoom()">创建房间</el-button>
-        <el-button class="btn1" @click="open()">加入房间</el-button>
-        <el-button class="btn1" @click="self()">个人信息</el-button>
-        <el-button class="btn1" @click="rankList()">排行榜</el-button>
-      </div>
+              </el-row>
 
+            </el-col>
+            <el-col span="12">
+              <el-row>
+                <el-col span="24">
+                  <el-badge value="胜场" class="item" type="warning">
+                  <div class="win" >{{winCnt}}</div>
+                  </el-badge>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+        </div>
+      </div>
+      <el-row id="content">
+        <el-col span="12">
+          <el-button id="btn1" class="btn1" @click="createRoom()"></el-button>
+        </el-col>
+        <el-col span="12">
+          <el-button id="btn2" class="btn1" @click="open()"></el-button>
+
+        </el-col>
+        <el-col span="12">
+          <el-button id="btn3" class="btn1" @click="self()"></el-button>
+
+        </el-col>
+        <el-col span="12">
+          <el-button id="btn4" class="btn1" @click="rankList()"></el-button>
+        </el-col>
+      </el-row>
     </div>
-
     <copyright></copyright>
-
   </div>
 </template>
 
 <script>
 import copyright from "../components/footer/copyright";
-import httpServer from "../global/httpServer";
 import * as URL from "../global/interfaceURL";
 
 export default {
@@ -39,40 +72,38 @@ export default {
   components: {
     copyright,
   },
-
   data() {
-
     return {
       userId: 0,
-      username: "test",
-      winCnt: 1,
+      username: "NULL",
+      winCnt: 0,
       faceId: 0,
       score: 0,
       faceURL:"../static/faces/f1.jpg",
-
     }
   },
   mounted() {
     this.getUserData();
-
   },
   methods: {
     //获得用户信息
     getUserData() {
       this.userId = localStorage.getItem("userId");
-      this.username = localStorage.getItem("username");
-      this.winCnt = localStorage.getItem("winCnt");
-      this.score = localStorage.getItem("score");
-      this.faceId = localStorage.getItem("faceId");
-      this.faceURL = "../static/faces/f"+this.faceId+".jpg";
-
-      this.$axios.get(URL.getQuestions, {params: {roomId: 10}})
+      this.$axios.get(URL.getAllMyInfo+'?userId='+this.userId)
         .then((res) => {
-          let questionList = res.data.data ;
-          console.log(questionList[0]);
-
+          let code = res.data.respCode
+          let userInfo  = res.data.userInfo
+          this.username = userInfo.username
+          this.winCnt = userInfo.winCnt
+          this.score = userInfo.score
+          this.faceId = userInfo.faceId
+          this.faceURL = "../static/faces/f"+this.faceId+".jpg";
         })
-
+      localStorage.setItem("username");
+      localStorage.getItem("winCnt");
+      localStorage.getItem("score");
+      localStorage.getItem("faceId");
+      this.faceURL = "../static/faces/f"+this.faceId+".jpg";
     },
     //创建房间
     createRoom() {
@@ -83,20 +114,18 @@ export default {
             case 1:
               let roomId = res.data.roomId;
               this.$message({
-                message: '房间（ID'+roomId+'）创建成功，请将房间ID发送给好友',
+                message: '房间（ID'+roomId+'）创建成功',
                 type: 'success'
               });
               this.$router.push({
                 path:'/room',
-                params:{
-                  userIsHost:true,
-                },
+                name:'生蚝单词-房间',
                 query: {
                   roomId: roomId,
+                  userHost:true,
                 }
               });
               break;
-
             default:
               this.$message.error("系统异常");
               break;
@@ -118,9 +147,6 @@ export default {
                 path:'/room',
                 query:{
                   roomId: roomId,
-                },
-                params:{
-                  userIsHost:false,
                 },
               });
               break;
@@ -158,135 +184,222 @@ export default {
 </script>
 
 <style scoped>
-@import url(https://fonts.googleapis.com/css?family=Sniglet|Raleway:900);
-html,body{
-  overflow: hidden !important;
-}
-::-webkit-scrollbar {
-  width: 0;
-}
-#root  {
-  min-height: 100%;
-  overflow: hidden;
-  text-align: center;
-}
-header{
-  height: 160px;
-  background: url('../assets/golf.png') repeat-x bottom;
-}
-h1{
-  font-weight: bold;
-  font-size: 3.6em;
-  font-family: 'Raleway', sans-serif;
-  margin: 0 auto;
-  margin-top: 30px;
-  width: 500px;
-  color: #F90;
-  text-align: center;
-}
-h2{
-  font-weight: 700;
-  font-size: 2em;
-  letter-spacing: 10px;
-  margin: 0 auto;
-  color: #F90;
-  text-align: center;
-}
+  @import url(https://fonts.googleapis.com/css?family=Sniglet|Raleway:900);
+  html,body{
+    overflow: hidden !important;
+  }
+  ::-webkit-scrollbar {
+    width: 0;
+  }
+  #root  {
+    min-height: 100%;
+    overflow: hidden;
+    text-align: center;
+  }
+  header{
+    height: 160px;
+    background: url('../assets/golf.png') repeat-x bottom;
+  }
+  h1{
+    font-weight: bold;
+    font-size: 3.6em;
+    font-family: 'Raleway', sans-serif;
+    margin: 0 auto;
+    margin-top: 30px;
+    width: 500px;
+    color: #F90;
+    text-align: center;
+  }
+  h2{
+    font-weight: 700;
+    font-size: 2em;
+    letter-spacing: 10px;
+    margin: 0 auto;
+    color: #F90;
+    text-align: center;
+  }
+  h3{
+    font-weight: 700;
+    line-height: 26px;
+    height: 26px;
+    font-size: 1.2em;
+    margin: 0;
+    vertical-align: bottom;
+    color: black;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+  }
+  /* Animation webkit */
+  @-webkit-keyframes myfirst
+  {
+    0% {
+      margin-left: -235px;
+      transform: scale(1.2);
+    }
+    90% {
+      margin-left: 100%;
+      transform: scale(1.0);
+    }
+    100% {
+      margin-left: 100%;
+    }
+  }
 
-/* Animation webkit */
-@-webkit-keyframes myfirst
-{
-  0% {
+  /* Animation */
+  @keyframes myfirst
+  {
+    0% {margin-left: -235px}
+    70% {margin-left: 100%;}
+    100% {margin-left: 100%;}
+  }
+
+  .fish{
+    background:url("../assets/fish.png");
+    width: 235px;
+    height: 104px;
     margin-left: -235px;
-    transform: scale(1.2);
+    position: absolute;
+    animation: myfirst 12s;
+    -webkit-animation: myfirst 12s;
+    animation-iteration-count: infinite;
+    -webkit-animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    -webkit-animation-timing-function: ease-in-out;
   }
-  90% {
-    margin-left: 100%;
-    transform: scale(1.0);
+
+  #fish{
+    top: 30%;
   }
-  100% {
-    margin-left: 100%;
+
+  #fish2{
+    top: 50%;
+    animation-delay: 3s;
+    -webkit-animation-delay: 3s;
   }
-}
 
-/* Animation */
-@keyframes myfirst
-{
-  0% {margin-left: -235px}
-  70% {margin-left: 100%;}
-  100% {margin-left: 100%;}
-}
+  #fish3{
+    top: 80%;
+    animation-delay: 8s;
+    -webkit-animation-delay: 8s;
+  }
 
-.fish{
-  background:url("../assets/fish.png");
-  width: 235px;
-  height: 104px;
-  margin-left: -235px;
-  position: absolute;
-  animation: myfirst 12s;
-  -webkit-animation: myfirst 12s;
-  animation-iteration-count: infinite;
-  -webkit-animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
-  -webkit-animation-timing-function: ease-in-out;
-}
+  #header_bar {
+    left: 50%;
+    background: white;
+    top:40%;
+    transform: translate(-50%,-50%);
+    width:450px;
+    position: absolute;
+    transition: all ease-in-out 0.3s;
+    height:max-content;
+    box-shadow:0 5px 20px rgba(0,0,0,0.07);
+    opacity:1;
+    border-radius:20px;
+  }
 
-#fish{
-  top: 30%;
-}
+  #header_bar p {
+    font-size: 1.3em;
+    padding: 0;
+    margin: 0;
+  }
 
-#fish2{
-  top: 50%;
-  animation-delay: 3s;
-  -webkit-animation-delay: 3s;
-}
+  #content {
+    left: 50%;
+    background: white;
+    top:65%;
+    transform: translate(-50%,-50%);
+    width:420px;
+    position: absolute;
+    transition: all ease-in-out 0.3s;
+    height:max-content;
+    box-shadow:0 5px 20px rgba(0,0,0,0.07);
+    opacity:1;
+    border-radius:20px;
+    padding: 90px 20px 20px 20px;
+  }
 
-#fish3{
-  top: 80%;
-  animation-delay: 8s;
-  -webkit-animation-delay: 8s;
-}
-
-#header_bar {
-  left: 50%;
-  background: white;
-  top:40%;
-  transform: translate(-50%,-50%);
-  width:450px;
-  position: absolute;
-  transition: all ease-in-out 0.3s;
-  height:max-content;
-  box-shadow:0 5px 20px rgba(0,0,0,0.07);
-  opacity:1;
-  border-radius:20px;
-}
-
-#header_bar p {
-  display: inline;
-  font-size: 1.5em;
-  padding: 20px;
-  line-height: 100px;
-}
-
-#content {
-  left: 50%;
-  background: white;
-  top:70%;
-  transform: translate(-50%,-50%);
-  width:450px;
-  position: absolute;
-  transition: all ease-in-out 0.3s;
-  height:max-content;
-  box-shadow:0 5px 20px rgba(0,0,0,0.07);
-  opacity:1;
-  border-radius:20px;
-}
-
-.btn1 {
-  height: 60px;
-  margin: 20px;
-  width: 150px;
-  display: inline-block;
-  border-radius: 20px;
-}
+  .btn1 {
+    height: 90px;
+    margin: 10px;
+    width: 170px;
+    display: inline-block;
+    border-radius: 10px;
+    transition: all ease-in-out 0.3s;
+    border-width: 0;
+  }
+  .btn1:hover{
+    transition: all ease-in-out 0.3s;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00000010;
+  }
+  #panel_selfInform{
+    left: 50%;
+    top:40%;
+    transform: translate(-50%,-50%);
+    width:400px;
+    height: max-content;
+    position: absolute;
+    transition: all ease-in-out 0.3s;
+    background: rgba(255,255,255,0.98);
+    border-radius: 15px;
+    padding:30px;
+    z-index: 99;
+  }
+  #img{
+    margin-top:20px;
+    margin-bottom:20px;
+    transition: all ease-in-out 0.3s;
+    width: max-content;
+  }
+  #img:hover{
+    transform: scale(1.05);
+    transition: all ease-in-out 0.3s;
+  }
+  #panel_selfInform >>> .el-tag{
+    right: 50%;
+    transform: translateX(50%);
+    top:125px;
+    z-index: 120;
+  }
+  .win{
+    width: 180px;
+    background-color: #fef0f0;
+    border-width: 2px;
+    border-color: #fde2e2;
+    border-style: solid;
+    border-radius: 50px;
+    color: #f56c6c;
+    font-family: 'Raleway', sans-serif;
+    padding: 5px 0 10px 0;
+    font-size: 28px;
+    user-select: none;
+    transition: all ease-in-out 0.3s;
+  }
+  .win:hover{
+    transition: all ease-in-out 0.3s;
+    background-color: #ffe0e0;
+  }
+  #panel_selfInform >>>.el-badge__content.is-fixed{
+    right: 40px;
+    background-color:gold;
+    color: #5a5a5a;
+  }
+  #content:hover{
+    transform: translate(-50%, -45%);
+  }
+  #btn1{
+    background: url("../assets/1.png");
+    background-size: cover;
+  }
+  #btn2{
+    background: url("../assets/2.png");
+    background-size: cover;
+  }
+  #btn3{
+    background: url("../assets/3.png");
+    background-size: cover;
+  }
+  #btn4{
+    background: url("../assets/4.png");
+    background-size: cover;
+  }
 </style>

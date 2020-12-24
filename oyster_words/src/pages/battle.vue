@@ -463,6 +463,15 @@
           }
         })
       },
+      quitGame(){
+        let uid = localStorage.getItem('userId')
+        this.$axios.get(`${URL.saveScore}?id=${uid}&battleId=${this.roomId}`)
+          .then((res) => {
+            if(res.data.respCode ===1){
+              // this.$message.success('提交成功')
+            }
+          })
+      },
       sleep(time){
         return new Promise((resolve) => setTimeout(resolve, time));
       },
@@ -509,6 +518,10 @@
             type: 'warning',
             message: '您已离开房间，本场游戏失败'
           });
+          this.updateGame()
+          clearInterval(this.loopTimeId)
+          clearInterval(this.loopScoreId)
+          this.TimeLeft = 0
           this.$router.push('/index')
 
         }).catch(() => {

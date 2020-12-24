@@ -12,6 +12,11 @@
       <div class="fish" id="fish3"></div>
       <div id="panel" class="panel_shadow">
         <div id="login-panel">
+          <el-alert v-if="battleId!==0"
+            :title="transText"
+            type="success"
+            close-text="好的">
+          </el-alert>
           <el-tabs v-model="tabSelect" align="center">
             <el-tab-pane label="登陆" name="first">
               <el-form label-position="left"
@@ -25,8 +30,8 @@
                   <el-input placeholder="请输入密码" v-model="login_form.password" show-password/>
                 </el-form-item>
                 <el-col :span="24" class="mt-30" style="margin-bottom:10px">
-                  <el-button v-if="battleId==0" round type="primary" style="width:100%;" @click="user_login(login_form)" :loading='loginLoading'>登陆</el-button>
-                  <el-button v-if="battleId!=0" round type="primary" style="width:100%;" @click="user_login_ToRoom(login_form)" :loading='loginLoading'>登陆</el-button>
+                  <el-button v-if="battleId===0" round type="primary" style="width:100%;" @click="user_login(login_form)" :loading='loginLoading'>登陆</el-button>
+                  <el-button v-if="battleId!==0" round type="primary" style="width:100%;" @click="user_login_ToRoom(login_form)" :loading='loginLoading'>登陆并加入房间{{battleId}}</el-button>
                 </el-col>
               </el-form>
             </el-tab-pane>
@@ -110,6 +115,7 @@
     }
     return {
       battleId:0,  // 为0表示进入首页，不为0则进入对战房间
+      transText:'好友邀请您一同游戏，请登陆后加入房间：',
       loginLoading:false,
       regLoading:false,
       tabSelect:"first",
@@ -143,7 +149,16 @@
       },
     }
   },
-  methods:{
+  created() {
+    this.battleId = this.$route.query.battleId;
+    this.transText = this.transText+this.battleId
+  },
+    mounted() {
+      if(!this.battleId){
+        this.battleId = 0
+      }
+    },
+    methods:{
       //登陆进入对战房间
     user_login_ToRoom(form_name){
       this.loginLoading = true
@@ -170,7 +185,8 @@
               localStorage.setItem("faceId",userdata.faceId)
               localStorage.setItem("userId",userdata.userId)
               localStorage.setItem("winCnt",userdata.winCnt)
-              this.$router.push('/room')
+              this.enterRoom(this.battleId,userdata.userId)
+              this.$router.push('/index')
               break;
             case 2:
               this.$message.error(res.data.msg)
@@ -181,7 +197,6 @@
               this.loginLoading = false
               break;
           }
-
         })
       }else if(username==='' || password===''){
         this.$message({
@@ -288,7 +303,40 @@
         this.faceURL = "../static/faces/f"+id+".jpg"
       }
 
-    }
+    },
+    enterRoom(roomId,guestId) {
+      this.$axios.get(URL.enterRoom, {params: {guestId: guestId, roomId: roomId}})
+        .then((res) => {
+          let code = res.data.respCode
+          switch (code) {
+            case 1:
+              this.$message({
+                message: res.data.msg,
+                type: 'success',
+              });
+              this.$router.push({
+                path:'/room',
+                query:{
+                  roomId: roomId,
+                },
+                params:{
+                  userIsHost:false,
+                },
+              });
+              break;
+            case 2:
+              this.$message.error(res.data.msg);
+              this.loginLoading = false
+              return null
+              break;
+            default:
+              this.$message.error("进入房间失败，系统异常");
+              this.loginLoading = false
+              return null
+              break;
+          }
+        })
+    },
   }
 };
 </script>

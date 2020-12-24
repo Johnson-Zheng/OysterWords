@@ -3,10 +3,9 @@
 
     <header>
       <h1>OYSTER</h1>
-      <h2>接受邀请</h2>
+      <h2>邀请对战</h2>
       <h3></h3>
     </header>
-
 
     <div id="form" style="background-color: #98d4f3;height: 80vh">
       <div class="fish" id="fish"></div>
@@ -14,21 +13,27 @@
       <div class="fish" id="fish3"></div>
       <div id="panel" class="panel_shadow">
         <div id="login-panel">
-          <el-tabs v-model="transfer" align="center">
-            <el-col style="margin-bottom: 20px">
-              <h4 style="color: #409EFF">房间号：{{battleId}}</h4>
+          <el-row align="center">
+            <el-col :span="24" align="center" style="margin-bottom: 20px">
+              <h4 style="color: #409EFF">单词对战房间号：{{battleId}}</h4>
             </el-col>
-            <el-row :gutter="20">
-<!--              登录-->
-              <el-col :span="10" class="mt-30" style="margin-bottom:10px;margin-left: 10px" >
+            <el-col span="24" align="center">
+              <p>{{transText}}</p>
+            </el-col>
+            <el-row>
+              <el-col :span="10" :offset="2" class="mt-30" align="center" style="margin-bottom:10px;margin-left: 10px" >
                 <el-button round type="primary" style="width:100%;" @click="goToLogin" :loading='loginLoading'>登陆/注册</el-button>
               </el-col>
-<!--              匿名访问-->
-              <el-col :span="10" class="mt-30" style="margin-bottom:10px;margin-left: 40px">
+              <el-col :span="10" :offset="2" class="mt-30" align="center" style="margin-bottom:10px;margin-left: 40px">
                 <el-button round type="primary" style="width:100%;" @click="goToRoom" :loading='loginLoading'>匿名访问</el-button>
               </el-col>
             </el-row>
-          </el-tabs>
+          </el-row>
+          <el-alert
+            type="warning"
+            description="匿名进入将为您生成匿名信息，您的所有信息将不会保存"
+            :closable="false">
+          </el-alert>
         </div>
 
       </div>
@@ -79,6 +84,7 @@
         loginLoading:false,
         regLoading:false,
         tabSelect:"first",
+        transText:'好友邀您单词对战，选择方式加入房间',
         login_form: {
           username: '',
           password: '',
@@ -111,19 +117,58 @@
     },
     created() {
       this.battleId = this.$route.query.battleId
-      },
+    },
     methods:{
       goToRoom(){
+        let userdata;
+        let uid;
         this.$axios.get(URL.getAnonymousId).then((res)=>{
-          this.id=res.data.userId
+          userdata = res.data.userInfo
+          uid = userdata.userId
+          localStorage.setItem("username",userdata.username)
+          localStorage.setItem("score",userdata.score)
+          localStorage.setItem("faceId",userdata.faceId)
+          localStorage.setItem("userId",userdata.userId)
+          localStorage.setItem("winCnt",userdata.winCnt)
+          this.enterRoom(this.battleId,uid)
         })
-        this.$axios.get("/battle/step_in?id="+id+"&battleId="+this.battleId)
-        this.$router.push('/room')
       },
       goToLogin(){
         this.id=localStorage.getItem("userId");
-        this.$axios.get("/battle/step_in?id="+id+"&battleId="+this.battleId);
-        this.$router.push('/loginToRoom');
+        this.$router.push('/login?battleId='+this.battleId);
+      },
+      enterRoom(roomId,guestId) {
+        this.$axios.get(URL.enterRoom, {params: {guestId: guestId, roomId: roomId}})
+          .then((res) => {
+            let code = res.data.respCode
+            switch (code) {
+              case 1:
+                this.$message({
+                  message: res.data.msg,
+                  type: 'success',
+                });
+                this.$router.push({
+                  path:'/room',
+                  query:{
+                    roomId: roomId,
+                  },
+                  params:{
+                    userIsHost:false,
+                  },
+                });
+                break;
+              case 2:
+                this.$message.error(res.data.msg);
+                this.loginLoading = false
+                return null
+                break;
+              default:
+                this.$message.error("进入房间失败，系统异常");
+                this.loginLoading = false
+                return null
+                break;
+            }
+          })
       },
     }
   };
@@ -177,7 +222,9 @@
     color: #F90;
     text-align: center;
   }
-
+  h4{
+    margin:0;
+  }
   /* Animation webkit */
   @-webkit-keyframes myfirst
   {
