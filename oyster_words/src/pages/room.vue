@@ -111,7 +111,7 @@ export default {
   created() {
     this.roomId = this.$route.query.roomId;
     this.IsUserHost = this.$route.query.userHost;
-    this.shareLink += this.roomId
+    this.shareLink = this.getShareLink()
     this.title += this.roomId
     this.dataInit();
   },
@@ -121,6 +121,14 @@ export default {
   },
   methods: {
     //初始化房间信息
+    getShareLink(){
+      let domain = window.location.href;
+      if(domain.indexOf('localhost')!==-1){
+        return this.shareLink +this.roomId
+      }else{
+        return 'http://oyster.q7w.cn/transfer_room?battleId=' +this.roomId
+      }
+    },
     dataInit(){
       this.$axios.get(URL.queryRoom, {params: {roomId: this.roomId}})
         .then((res) => {
@@ -138,7 +146,7 @@ export default {
           this.guestFaceId = res.data.data.guestInfo.faceId;
           this.guestScore = res.data.data.guestScore;
           this.guestFaceURL = "../static/faces/f" + this.guestFaceId + ".jpg";
-          this.$message.error('UID='+userId+'HostId='+this.hostId)
+
         })
     },
     //监听房间状态
@@ -387,11 +395,11 @@ export default {
   }
   #battle{
     position: absolute;
-    background: white;
+    background: #fafafa;
     width: 400px;
     margin-left:50%;
     transform: translateX(-50%);
-    top:35%;
+    top:30%;
   }
   #hostFace >>> .el-badge__content.is-fixed{
     top: 40px;
@@ -416,6 +424,7 @@ export default {
   #userInfo{
     height: max-content;
     margin-top:20px;
+    background:white;
   }
   #p,#k{
     font-size: 48px;

@@ -58,7 +58,7 @@
       <h1>Battle</h1>
       <h2>对战房间</h2>
     </header>
-    <div id="form" style="background-color: #98d4f3;height: calc(100vh - 140px);width: 100vw">
+    <div id="form" style="background-color: #98d4f3;height: 115vh;width: 100vw">
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
@@ -141,7 +141,6 @@
       </div>
 
     </div>
-    <copyright></copyright>
   </div>
 </template>
 
@@ -620,7 +619,7 @@
     background: url('../assets/golf.png') repeat-x bottom;
   }
   #battle{
-    background: white;
+    background: #fafafa;
     width: 400px;
     margin-left:50%;
     transform: translateX(-50%);

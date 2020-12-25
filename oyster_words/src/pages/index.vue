@@ -9,16 +9,16 @@
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
       <div id="panel_selfInform" class="panel_shadow" align="center">
-        <el-tag style="border-radius: 50px;position: absolute" type="warning">UID：{{userId}}</el-tag>
+        <el-tag size="small" style="border-radius: 50px;position: absolute" type="warning">UID：{{userId}}</el-tag>
         <div id="img">
-          <el-avatar v-if="faceId===0" :size="100" fit="cover" icon="el-icon-user-solid"></el-avatar>
-          <el-avatar v-if="faceId!==0" :size="100" fit="cover" :src="faceURL"></el-avatar>
+          <el-avatar v-if="faceId===0" :size="70" fit="cover" icon="el-icon-user-solid"></el-avatar>
+          <el-avatar v-if="faceId!==0" :size="70" fit="cover" :src="faceURL"></el-avatar>
         </div>
         <div>
           <el-row>
             <h3>{{username}}</h3>
           </el-row>
-          <el-row style="margin-top: 30px">
+          <el-row style="margin-top: 20px">
             <el-col span="12">
               <el-row>
                 <el-col>
@@ -98,12 +98,12 @@ export default {
           this.score = userInfo.score
           this.faceId = userInfo.faceId
           this.faceURL = "../static/faces/f"+this.faceId+".jpg";
+          localStorage.setItem("username",this.username);
+          localStorage.setItem("winCnt",this.winCnt);
+          localStorage.setItem("score",this.score);
+          localStorage.setItem("faceId",this.faceId);
         })
-      localStorage.setItem("username");
-      localStorage.getItem("winCnt");
-      localStorage.getItem("score");
-      localStorage.getItem("faceId");
-      this.faceURL = "../static/faces/f"+this.faceId+".jpg";
+
     },
     //创建房间
     createRoom() {
@@ -188,6 +188,9 @@ export default {
   html,body{
     overflow: hidden !important;
   }
+  img{
+    user-select: none!important;
+  }
   ::-webkit-scrollbar {
     width: 0;
   }
@@ -219,14 +222,13 @@ export default {
     text-align: center;
   }
   h3{
-    font-weight: 700;
-    line-height: 26px;
-    height: 26px;
+    font-weight: bolder;
     font-size: 1.2em;
+    letter-spacing: 3px;
     margin: 0;
     vertical-align: bottom;
     color: black;
-    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    font-family: 'Raleway', sans-serif;
   }
   /* Animation webkit */
   @-webkit-keyframes myfirst
@@ -304,8 +306,8 @@ export default {
 
   #content {
     left: 50%;
-    background: white;
-    top:65%;
+    background: #F6F7F9;
+    top:66%;
     transform: translate(-50%,-50%);
     width:420px;
     position: absolute;
@@ -315,6 +317,7 @@ export default {
     opacity:1;
     border-radius:20px;
     padding: 90px 20px 20px 20px;
+    border: 5px white solid;
   }
 
   .btn1 {
@@ -333,7 +336,7 @@ export default {
   }
   #panel_selfInform{
     left: 50%;
-    top:40%;
+    top:39%;
     transform: translate(-50%,-50%);
     width:400px;
     height: max-content;
@@ -341,14 +344,14 @@ export default {
     transition: all ease-in-out 0.3s;
     background: rgba(255,255,255,0.98);
     border-radius: 15px;
-    padding:30px;
     z-index: 99;
   }
   #img{
-    margin-top:20px;
+    margin-top:10px;
     margin-bottom:20px;
     transition: all ease-in-out 0.3s;
     width: max-content;
+    user-select: none;
   }
   #img:hover{
     transform: scale(1.05);
@@ -357,7 +360,7 @@ export default {
   #panel_selfInform >>> .el-tag{
     right: 50%;
     transform: translateX(50%);
-    top:125px;
+    top:85px;
     z-index: 120;
   }
   .win{
@@ -382,6 +385,7 @@ export default {
     right: 40px;
     background-color:gold;
     color: #5a5a5a;
+    user-select: none;
   }
   #content:hover{
     transform: translate(-50%, -45%);
@@ -402,4 +406,5 @@ export default {
     background: url("../assets/4.png");
     background-size: cover;
   }
+
 </style>

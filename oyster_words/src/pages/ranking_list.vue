@@ -4,7 +4,7 @@
       <h1>Rank</h1>
       <h2>排行榜</h2>
     </header>
-    <div id="form" style="background-color: #98d4f3;height: calc(100vh - 50px);width: 100vw">
+    <div id="form" style="background-color: #98d4f3;height:105vh;width:100vw">
       <div class="fish" id="fish"></div>
       <div class="fish" id="fish2"></div>
       <div class="fish" id="fish3"></div>
